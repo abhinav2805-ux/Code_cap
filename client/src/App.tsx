@@ -6,6 +6,7 @@ import ContactForm from "./components/ContactUs.tsx"
 import SupportUs from "./components/SupportUs.tsx";
 
 import HeroSection from "./components/HeroSection";
+import FindTeamMates from './components/FindTeamMates.tsx';
 
 function App() {
   
@@ -14,10 +15,11 @@ function App() {
     <>
 
     <Navbar />
-    <HeroSection></HeroSection>
+    <HeroSection />
     <WhatWeOffer />
-    <ContactForm/>
-    <SupportUs/>
+    <ContactForm />
+    <SupportUs />
+    <FindTeamMates />
     </>
   )
 }
