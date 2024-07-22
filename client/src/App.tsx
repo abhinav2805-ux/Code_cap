@@ -1,36 +1,22 @@
-import './App.css'
-import WhatWeOffer from './components/WhatWeOffer';
-import Navbar from "./components/Navbar";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import Home from './Home';
 
-import ContactForm from "./components/ContactUs.tsx"
-import SupportUs from "./components/SupportUs.tsx";
+const App = () => {
+    return (
+        <Router>
+            <div>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    {/* Add other routes here */}
+                    <Route path="/" element={<Home/>} />
+                </Routes>
+            </div>
+        </Router>
+    );
+};
 
-import HeroSection from "./components/HeroSection";
-
-
-
-import FindTeamMates from './components/FindTeamMates.tsx';
-import Featured from './components/Featured.tsx';
-
-function App() {
-  
-
-  return (
-    <>
-
-    <Navbar />
-    <HeroSection />
-    <WhatWeOffer />
-
-    <Featured/>
-    <ContactForm/>
-    <SupportUs/>
-
- 
-   
-
-    </>
-  )
-}
-
-export default App
+export default App;
