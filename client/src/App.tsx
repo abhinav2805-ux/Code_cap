@@ -1,29 +1,25 @@
-import { Button } from "@/components/ui/button";
-import './App.css'
-import WhatWeOffer from './components/WhatWeOffer';
-import Navbar from "./components/Navbar";
 
-import ContactForm from "./components/ContactUs.tsx"
-import SupportUs from "./components/SupportUs.tsx";
 
-import HeroSection from "./components/HeroSection";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './Login';
+import Register from './Register';
+import Home from './Home';
 
-function App() {
-  
+const App = () => {
+    return (
+        <Router>
+            <div>
+                <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    {/* Add other routes here */}
+                    <Route path="/" element={<Home/>} />
+                </Routes>
+            </div>
+        </Router>
+    );
+};
 
-  return (
-    <>
+export default App;
 
-    <Navbar />
-
-     <Navbar />
-     <HeroSection></HeroSection>
-
-    <WhatWeOffer />
-    <ContactForm/>
-    <SupportUs/>
-    </>
-  )
-}
-
-export default App
