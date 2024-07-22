@@ -6,6 +6,7 @@ import ContactForm from "./components/ContactUs.tsx"
 import SupportUs from "./components/SupportUs.tsx";
 
 import HeroSection from "./components/HeroSection";
+import Featured from './components/Featured.tsx';
 
 function App() {
   
@@ -16,6 +17,7 @@ function App() {
     <Navbar />
     <HeroSection></HeroSection>
     <WhatWeOffer />
+    <Featured/>
     <ContactForm/>
     <SupportUs/>
     </>
