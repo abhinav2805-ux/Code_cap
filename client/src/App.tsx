@@ -6,6 +6,10 @@ import ContactForm from "./components/ContactUs.tsx"
 import SupportUs from "./components/SupportUs.tsx";
 
 import HeroSection from "./components/HeroSection";
+
+
+
+import FindTeamMates from './components/FindTeamMates.tsx';
 import Featured from './components/Featured.tsx';
 
 function App() {
@@ -15,11 +19,16 @@ function App() {
     <>
 
     <Navbar />
-    <HeroSection></HeroSection>
+    <HeroSection />
     <WhatWeOffer />
+
     <Featured/>
     <ContactForm/>
     <SupportUs/>
+
+ 
+   
+
     </>
   )
 }
