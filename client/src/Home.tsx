@@ -12,9 +12,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <Navbar />
       <HeroSection></HeroSection>
-
       <WhatWeOffer />
       <ContactForm />
       <SupportUs />

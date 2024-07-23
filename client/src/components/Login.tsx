@@ -16,7 +16,7 @@ const LoginForm = () => {
         
 
       </div>
-      <div className="flex w-full max-w-7xl">
+      <div className="flex  w-full max-w-7xl">
         {/* Sign-up Form Section */}
         <div className=" p-10 bg-gray-100 rounded-md border-gray-300 ">
           <div className="text-center ">
