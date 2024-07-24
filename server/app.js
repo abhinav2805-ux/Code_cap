@@ -12,6 +12,7 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 app.use('/user',userRouter)
 
 mongoose.connect(process.env.MONGO_URI)
