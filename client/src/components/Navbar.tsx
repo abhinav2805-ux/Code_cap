@@ -5,7 +5,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className="bg-black text-white flex justify-around items-center p-4">
       <div className="text-2xl font-bold text-yellow-500">
-      <img src="./public/logoofnavbar.jpg" className='w-[250px]' alt="LOGO" />
+      <img src="/logoofnavbar.jpg" className='w-[250px]' alt="LOGO" />
       </div>
       <div className="flex translate-x-[-80px] space-x-8">
         <a href="#" className="text-yellow-500 text-xl font-medium">HOME</a>
