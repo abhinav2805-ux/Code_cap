@@ -1,6 +1,6 @@
 const LoginForm = () => {
   return (
-    <div className="flex gap-11 flex-col items-center justify-center min-h-screen bg-gray-950">
+    <div className="flex gap-11 flex-col items-center justify-center min-h-screen bg-black">
       <div className='text-white flex w-full items-center justify-center '>
         <img className='w-60 h-1/2' src="hat.jpg" alt="" />
         <div className='flex flex-col gap-6 justify-center items-center'>

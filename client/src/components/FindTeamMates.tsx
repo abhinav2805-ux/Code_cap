@@ -1,5 +1,6 @@
 "use client"
 import React, { useState } from "react";
+import Navbar from "@/components/Navbar";
 import SearchIcon from '@mui/icons-material/Search';
 import { Check, ChevronsUpDown } from "lucide-react"
  import Profile from "./Profile";
@@ -61,7 +62,7 @@ const FindTeamMates: React.FC = () =>  {
   };
   return (
     <>
-    
+    <Navbar/>
     <div className='w-full h-screen px-[250px] bg-black '>
     {/* // find */}
     <div className='w-full h-[15%] p-4'>

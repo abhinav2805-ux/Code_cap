@@ -8,8 +8,8 @@ const Navbar: React.FC = () => {
       <img src="/logoofnavbar.jpg" className='w-[250px]' alt="LOGO" />
       </div>
       <div className="flex translate-x-[-80px] space-x-8">
-        <a href="#" className="text-yellow-500 text-xl font-medium">HOME</a>
-        <a href="#" className="hover:text-yellow-500 text-xl font-medium">TEAM</a>
+        <a href="/" className="text-yellow-500 text-xl font-medium">HOME</a>
+        <a href="/buildteam" className="hover:text-yellow-500 text-xl font-medium">TEAM</a>
         <a href="#" className="hover:text-yellow-500 text-xl font-medium">HACKATHONS</a>
         <a href="#" className="hover:text-yellow-500 text-xl font-medium">ABOUT</a>
       </div>
