@@ -4,7 +4,9 @@ const app=express();
 require('dotenv').config()
 const mongoose = require('mongoose');
 
-const userRouter=require('./routes/userRouter')
+const userRouter=require('./routes/userRouter');
+const eventRouter = require('./routes/eventRouter');
+
 
 app.use(cors({
     origin: '*',
@@ -13,7 +15,8 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
-app.use('/user',userRouter)
+app.use('api/user',userRouter)
+app.use('/api/events',eventRouter)
 
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{app.listen(process.env.PORT || 3000,()=>{
