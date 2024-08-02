@@ -6,6 +6,7 @@ import FindTeamMates from './components/FindTeamMates';
 import About from './About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import EditProfile from './components/Editprofile';
 
 const App = () => {
     return (
@@ -18,6 +19,7 @@ const App = () => {
                     <Route path ="/buildteam" element={<FindTeamMates/>}></Route>
                     <Route path="/" element={<Home/>} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/edit-profile" element={<EditProfile />} />
                 </Routes>
                 <Footer/>
             </div>

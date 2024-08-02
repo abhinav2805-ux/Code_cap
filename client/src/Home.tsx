@@ -11,7 +11,6 @@ import HeroSection from "./components/HeroSection";
 function Home() {
   return (
     <>
-      <Navbar />
       <HeroSection></HeroSection>
       <WhatWeOffer />
       <Featured/>
