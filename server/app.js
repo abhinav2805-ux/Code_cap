@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const app=express();
+const cookieParser = require('cookie-parser');
 require('dotenv').config()
 const mongoose = require('mongoose');
 
@@ -14,10 +15,10 @@ app.use(cors({
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json())
+app.use(cookieParser());
 app.use(express.urlencoded({extended:true}))
-app.use('api/user',userRouter)
+app.use('/api/user',userRouter)
 app.use('/api/events',eventRouter)
-
 mongoose.connect(process.env.MONGO_URI)
 .then(()=>{app.listen(process.env.PORT || 3000,()=>{
     console.log("server is listening");
