@@ -26,7 +26,10 @@ const Navbar: React.FC = () => {
         <div className="text-2xl font-bold text-yellow-500">
           <img src="/logoofnavbar.jpg" className="w-[150px] md:w-[250px]" alt="LOGO" />
         </div>
-        <div className="hidden md:flex mr-24 space-x-8">
+
+
+        <div className="hidden mr-24 md:flex space-x-8">
+
           <a href="/" className="text-yellow-500 text-2xl font-medium">HOME</a>
           <a href="/buildteam" className="hover:text-yellow-500 text-2xl font-medium">TEAM</a>
           <a href="#" className="hover:text-yellow-500 text-2xl font-medium">HACKATHONS</a>
