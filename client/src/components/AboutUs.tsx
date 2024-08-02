@@ -1,6 +1,8 @@
+import React from 'react';
+
 const teamMembers = [
   {
-    name: "Abhinav",
+    name: "Abhinav Gupta",
     title: "Frontend Developer & Project Manager",
     description:
       "I serve as the frontend developer and project manager for this initiative. My passion for technology drives my desire to create seamless user experiences. I oversee the development process and ensure that our projects are executed efficiently and effectively.",
@@ -31,13 +33,13 @@ const teamMembers = [
 
 function AboutUs() {
   return (
-    <div className="bg-black text-white min-h-screen  py-10">
+    <div className="bg-black text-white min-h-screen py-10">
       <div className="max-w-5xl mx-auto px-4">
-        <h1 className="text-5xl font-bold text-center mb-4">ABOUT US</h1>
-        <h5 className="text-xl text-center text-yellow-400 mb-12">
+        <h1 className="text-3xl md:text-5xl font-bold text-center mb-4">ABOUT US</h1>
+        <h5 className="text-lg md:text-xl text-center text-yellow-400 mb-12">
           We are developers of CODECAP
         </h5>
-        <p className="text-center text-xl mb-8">
+        <p className="text-base md:text-xl mb-8 text-center">
           We are a team of five enthusiastic college students who share a
           passion for technology, innovation, and collaboration. Recognizing the
           challenges that students face in finding the{" "}
@@ -48,27 +50,27 @@ function AboutUs() {
           <span className="text-yellow-400">updated on the latest events</span>,
           we decided to create a platform that addresses these needs.
         </p>
-        <p className="text-center text-xl mb-16">
+        <p className="text-base md:text-xl mb-16 text-center">
           Our website is designed to help college students connect with
           like-minded peers, form teams for hackathons, and discover exciting
           hackathon opportunities. We believe that by fostering a community of
           motivated and talented individuals, we can enhance the learning
           experience and drive innovation within our college and beyond.
         </p>
-        <h2 className="text-5xl font-bold text-center mb-8">MEET OUR TEAM</h2>
-        <div className="bg-black p-6 mb-8 rounded-xl text-center border-2 border-white">
-          <div className="md:flex justify-start items-center gap-16">
+        <h2 className="text-3xl md:text-5xl font-bold text-center mb-8">MEET OUR TEAM</h2>
+        <div className="bg-black p-4 md:p-6 mb-8 rounded-xl text-center border-2 border-white">
+          <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
             <img
-              className="md:w-56 md:h-56 w-64 h-64 "
+              className="w-32 h-32 md:w-56 md:h-56 object-cover rounded-full mb-4 md:mb-0"
               src="/Rectangle.svg"
-              alt=""
+              alt="Kartik Singh"
             />
-            <div className="flex flex-col text-left">
-              <h3 className="text-4xl font-bold mb-2">Kartik Singh</h3>
-              <p className="text-yellow-400 mb-2 font-semibold text-lg underline">
+            <div className="text-center md:text-left">
+              <h3 className="text-2xl md:text-4xl font-bold mb-2">Kartik Singh</h3>
+              <p className="text-yellow-400 mb-2 font-semibold text-lg md:text-xl underline">
                 Founder & UI/UX Designer
-              </p>{" "}
-              <p className="text-lg">
+              </p>
+              <p className="text-base md:text-lg">
                 I am the originator of the idea behind our platform. With the
                 support of my capable team, I transformed this vision into
                 reality. I designed the UI/UX of the website to ensure an
@@ -84,35 +86,36 @@ function AboutUs() {
           {teamMembers.map((member) => (
             <div
               key={member.name}
-              className="bg-black p-6 rounded-xl text-center border-2 border-white"
+              className="bg-black p-4 md:p-6 rounded-xl text-center border-2 border-white"
             >
-              <div className="flex justify-start items-center gap-10">
+              <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 {member.image && (
                   <img
                     src={member.image}
                     alt={member.name}
-                    className="w-36 h-36 rounded-full "
+                    className="w-32 h-32 md:w-36 md:h-36 object-cover rounded-full mb-4 md:mb-0"
                   />
                 )}
-                <div className="flex flex-col ">
-                  <h3 className="text-3xl text-left font-bold mb-2">
+                <div className="text-center md:text-left">
+                  <h3 className="text-2xl md:text-3xl font-bold mb-2">
                     {member.name}
                   </h3>
-                  <p className="text-yellow-400 font-semibold mb-2 text-lg underline text-left">
+                  <p className="text-yellow-400 font-semibold mb-2 text-lg md:text-xl underline">
                     {member.title}
+                  </p>
+                  <p className="text-base md:text-lg mt-4">
+                    {member.description}
                   </p>
                 </div>
               </div>
-
-              <p className="text-left text-lg mt-6">{member.description}</p>
             </div>
           ))}
         </div>
-        <div className="text-center mt-16">
-          <h2 className="text-5xl font-bold mb-4">
+        <div className="text-center mt-12">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
             <span className="text-yellow-400">THANK YOU</span> FOR YOUR SUPPORT
           </h2>
-          <p className="mb-6 text-xl font-semibold">
+          <p className="mb-6 text-base md:text-xl font-semibold">
             If you <span className="text-yellow-400">liked</span> our hard work
             and tool, you can show us support by
             <span className="text-yellow-400">donating</span> to us. It will
@@ -120,7 +123,7 @@ function AboutUs() {
             <span className="text-yellow-400">maintain this website</span> and
             take it globally.
           </p>
-          <button className="bg-yellow-400 text-black py-2 px-4 rounded-lg">
+          <button className="bg-yellow-400 text-black py-2 px-4 rounded-lg text-base md:text-xl">
             BUY US A COFFEE
           </button>
         </div>

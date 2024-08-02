@@ -62,7 +62,6 @@ const FindTeamMates: React.FC = () =>  {
   };
   return (
     <>
-    <Navbar/>
     <div className='w-full h-screen px-[250px] bg-black '>
     {/* // find */}
     <div className='w-full h-[15%] p-4'>
