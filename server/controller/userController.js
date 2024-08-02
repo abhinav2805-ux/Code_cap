@@ -68,7 +68,7 @@ exports.signUp=async(req,res)=>{
                         // sameSite: 'Strict',
                         maxAge: 3600000, // 1 hour
                       });
-                      res.status(200).json({ token, user: createdUser });
+                      return res.status(200).json({ token, user: createdUser });
                     }
                 );
                 
@@ -76,7 +76,7 @@ exports.signUp=async(req,res)=>{
         })
     } catch (error) {
         console.log(error);
-        res.status(500).json({"msg":"There was some error"})
+        return res.status(500).json({"msg":"There was some error"})
     }
 }
 
@@ -108,11 +108,61 @@ exports.signIn=async (req, res) => {
             // sameSite: 'Strict',
             maxAge: 3600000, // 1 hour
           });
-          res.status(200).json({ token, user });
+          return res.status(200).json({ token, user });
         }
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server error');
+      return res.status(500).send('Server error');
     }
   };
+
+  exports.signout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        //secure: process.env.NODE_ENV === 'production',
+        //sameSite: 'Strict',
+    });
+    return res.status(200).json({ msg: 'Successfully logged out' });
+};
+
+exports.findUsers = async (req, res) => {
+  try {
+      const { Text, Gender, Year, College, Branch } = req.query;
+      const regex = Text ? new RegExp(Text, 'i') : null; // 'i' for case-insensitive
+
+      // Construct a query object based on available parameters
+      let query = {};
+
+      if (Gender) query.Gender = Gender;
+      if (Year) query.Year = Year;
+      if (College) query.College = College;
+      if (Branch) query.Branch = Branch;
+
+      if (regex) {
+        query.$or = [
+            { Name: regex },
+            { Role: regex },
+            { Skill: { $in: [regex] } }
+        ];
+    }
+    const projection = {
+      Name: 1,
+      Email: 1,
+      Gender: 1,
+      Skill: 1,
+      Role: 1,
+      Username: 1,
+      College: 1,
+      Branch: 1
+  };
+      // Execute the database query
+      const users = await userModel.find(query).select(projection);
+
+      // Respond with the combined result set
+      res.status(200).json(users);
+  } catch (error) {
+      console.error('Error finding users:', error);
+      res.status(500).json({ msg: 'Server error' });
+  }
+};
