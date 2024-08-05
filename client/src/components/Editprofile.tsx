@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import  { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
 
@@ -6,7 +6,7 @@ interface FormData {
   fullName: string;
   email: string;
   gender: string;
-  skill: string;
+  skills: string[];  // Changed from single skill to an array of skills
   college: string;
   year: string;
   branch: string;
@@ -15,14 +15,7 @@ interface FormData {
   role: string;
   password: string;
   confirmPassword: string;
-  avatar: string;  // New field for avatar
-}
-
-interface FormErrors {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
+  avatar: string;  // Avatar field remains the same
 }
 
 function EditProfile() {
@@ -30,7 +23,7 @@ function EditProfile() {
     fullName: '',
     email: '',
     gender: '',
-    skill: '',
+    skills: [''],  // Initialize with an empty string for the first skill
     college: '',
     year: '',
     branch: '',
@@ -39,8 +32,15 @@ function EditProfile() {
     role: '',
     password: '',
     confirmPassword: '',
-    avatar: 'https://avatars.githubusercontent.com/u/114240845?s=400&u=c23a378d6835e8379337c1e3be9a6ff61cf7aa71&v=4', // Initial avatar URL
-  });
+    avatar: 'https://avatars.githubusercontent.com/u/114240845?s=400&u=c23a378d6835e8379337c1e3be9a6ff61cf7aa71&v=4',
+  });
+
+interface FormErrors {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+}
 
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate(); // React Router's navigate function
@@ -68,13 +68,13 @@ function EditProfile() {
   const validate = () => {
     const errors: FormErrors = {};
 
-    if (!formData.fullName) errors.fullName = 'Full Name is required';
+    if (!formData.fullName) {errors.fullName = 'Full Name is required';}
     if (!formData.email) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = 'Email address is invalid';
     }
-    if (!formData.password) errors.password = 'Password is required';
+    if (!formData.password) {errors.password = 'Password is required';}
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
     }
@@ -94,6 +94,37 @@ function EditProfile() {
   const handleBackClick = () => {
     navigate('/'); // Navigate to the home page
   };
+ 
+
+  const handleSkillChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const newSkills = [...formData.skills];
+    newSkills[index] = e.target.value;
+    setFormData({ ...formData, skills: newSkills });
+  };
+  
+  const addSkill = () => {
+    setFormData({ ...formData, skills: [...formData.skills, ''] });
+  };
+  
+  const removeSkill = (index: number) => {
+    const newSkills = formData.skills.filter((_, i) => i !== index);
+    setFormData({ ...formData, skills: newSkills });
+  };
+  
+                                      // Fetching data from API
+  
+  fetch(`http://localhost:3000/api/user/editProfile/${Username}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    }
+  })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error));
+  
+
+
 
   return (
     <div className="bg-black flex flex-col justify-center items-center space-y-4 min-h-screen p-6">
@@ -128,7 +159,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.fullName ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="fullName"
+              name="Name"
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Full Name"
@@ -139,7 +170,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.email ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="email"
+              name="Email"
               value={formData.email}
               onChange={handleChange}
               placeholder="E-mail"
@@ -150,27 +181,47 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="gender"
+              name="Gender"
               value={formData.gender}
               onChange={handleChange}
               placeholder="Gender"
               required
             />
           </div>
+                  <div className="col-span-2 md:col-span-1">
+                    {formData.skills.map((skill, index) => (
+                    <div key={index} className="flex items-center mb-2">
+                    <input
+                    className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+                    name={`skill-${index}`}
+                    value={skill}
+                    onChange={(e) => handleSkillChange(e, index)}
+                    placeholder={`Skill ${index + 1}`}
+                    required
+              />
+              {formData.skills.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => removeSkill(index)}
+                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addSkill}
+            className="mt-2 bg-blue-500 text-white px-3 py-2 rounded"
+          >
+            Add Skill
+          </button>
+</div>
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="skill"
-              value={formData.skill}
-              onChange={handleChange}
-              placeholder="Skill"
-              required
-            />
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="college"
+              name="College"
               value={formData.college}
               onChange={handleChange}
               placeholder="College"
@@ -180,7 +231,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="year"
+              name="Year"
               value={formData.year}
               onChange={handleChange}
               placeholder="Year"
@@ -190,7 +241,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="branch"
+              name="Branch"
               value={formData.branch}
               onChange={handleChange}
               placeholder="Branch"
@@ -200,7 +251,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="linkedin"
+              name="LinkedIn"
               value={formData.linkedin}
               onChange={handleChange}
               placeholder="LinkedIn"
@@ -210,7 +261,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="github"
+              name="Github"
               value={formData.github}
               onChange={handleChange}
               placeholder="Github"
@@ -220,7 +271,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="role"
+              name="Role"
               value={formData.role}
               onChange={handleChange}
               placeholder="Role"
@@ -230,7 +281,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.password ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="password"
+              name="Password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
@@ -242,7 +293,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.confirmPassword ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="confirmPassword"
+              name="ConfirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"

@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
           <div className="text-white text-xl font-medium hover:text-yellow-500">
             <h2 className="text-white text-xl font-medium hover:text-yellow-500">PROFILE</h2>
           </div>
-          <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>EDIT PROFILE</a>
+          <a href="/edit-profile" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>EDIT PROFILE</a>
           <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>STATUS</a>
           <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>LOG OUT</a>
         </div>
