@@ -30,7 +30,7 @@ const Navbar: React.FC = () => {
 
         <div className="hidden mr-24 md:flex space-x-8">
 
-          <a href="/" className="text-yellow-500 text-2xl font-medium">HOME</a>
+          <a href="/Home" className="text-yellow-500 text-2xl font-medium">HOME</a>
           <a href="/buildteam" className="hover:text-yellow-500 text-2xl font-medium">TEAM</a>
           <a href="#" className="hover:text-yellow-500 text-2xl font-medium">HACKATHONS</a>
           <a href="/about" className="hover:text-yellow-500 text-2xl font-medium">ABOUT</a>
@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             <div className="absolute right-0 mt-40 px-4 space-y-2 py-2 w-48 bg-black text-white rounded-lg shadow-lg flex-col justify-center items-center">
             <div><a href="/edit-profile" className="text-black rounded-xl font-semibold block px-4 py-2 text-center text-lg bg-white">Edit Profile</a></div>
               {/* <Button><a href="/status" className="block px-4 py-2 hover:bg-gray-700">Status</a></Button> */}
-              <div><a href="/logout" className=" text-black rounded-xl font-semibold  text-center text-lg block px-4 py-2 bg-white">Log Out</a></div>
+              <div><a href="/" className=" text-black rounded-xl font-semibold  text-center text-lg block px-4 py-2 bg-white">Log Out</a></div>
             </div>
           )
         }
@@ -61,7 +61,7 @@ const Navbar: React.FC = () => {
       </nav>
       <div className={`fixed top-0 left-0 w-64 h-full bg-black transition-transform transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} z-50`}>
         <div className="flex flex-col items-center space-y-8 mt-20">
-          <a href="/" className="text-yellow-500 text-xl font-medium" onClick={closeSidebar}>HOME</a>
+          <a href="/Home" className="text-yellow-500 text-xl font-medium" onClick={closeSidebar}>HOME</a>
           <a href="/buildteam" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>TEAM</a>
           <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>HACKATHONS</a>
           <a href="/about" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>ABOUT</a>
@@ -70,7 +70,7 @@ const Navbar: React.FC = () => {
           </div>
           <a href="/edit-profile" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>EDIT PROFILE</a>
           <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>STATUS</a>
-          <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>LOG OUT</a>
+          <a href="/" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>LOG OUT</a>
         </div>
       </div>
       {isOpen && (
