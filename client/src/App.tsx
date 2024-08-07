@@ -1,7 +1,7 @@
 // App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Login from './Login';
+ // import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import FindTeamMates from './components/FindTeamMates';
@@ -10,7 +10,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import EditProfile from './components/Editprofile';
 import MainPage from './components/MainPage';
-
+import Hackathons from './components/Hackathons';
 const App: React.FC = () => {
     return (
         <Router>
@@ -39,6 +39,7 @@ const Layout: React.FC = () => {
                     <Route path="/buildteam" element={<FindTeamMates />} />
                     <Route path="/about" element={<About />} />
                     <Route path="/edit-profile" element={<EditProfile />} />
+                    <Route path="/hackathons" element={<Hackathons />} />
                 </Routes>
             </main>
             <Footer />
