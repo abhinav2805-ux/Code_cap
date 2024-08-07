@@ -1,12 +1,13 @@
-import  { useState, ChangeEvent, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
 
 interface FormData {
+  username: string;
   fullName: string;
   email: string;
   gender: string;
-  skills: string[];  // Changed from single skill to an array of skills
+  skills: string[];
   college: string;
   year: string;
   branch: string;
@@ -15,15 +16,23 @@ interface FormData {
   role: string;
   password: string;
   confirmPassword: string;
-  avatar: string;  // Avatar field remains the same
+  avatar: string;
+}
+
+interface FormErrors {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
 }
 
 function EditProfile() {
   const [formData, setFormData] = useState<FormData>({
+    username: '',
     fullName: '',
     email: '',
     gender: '',
-    skills: [''],  // Initialize with an empty string for the first skill
+    skills: [''],
     college: '',
     year: '',
     branch: '',
@@ -33,17 +42,37 @@ function EditProfile() {
     password: '',
     confirmPassword: '',
     avatar: 'https://avatars.githubusercontent.com/u/114240845?s=400&u=c23a378d6835e8379337c1e3be9a6ff61cf7aa71&v=4',
-});
-
-interface FormErrors {
-  fullName?: string;
-  email?: string;
-  password?: string;
-  confirmPassword?: string;
-}
-
+  });
   const [errors, setErrors] = useState<FormErrors>({});
-  const navigate = useNavigate(); // React Router's navigate function
+  const navigate = useNavigate();
+  const { username } = useParams<{ username: string }>(); // Get the username from the URL params
+
+  useEffect(() => {
+    // Fetch user data from the backend
+    fetch(`http://localhost:3000/api/user/getProfile/${username}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setFormData({
+          username: data.username, // Add username to the state
+          fullName: data.fullName,
+          email: data.email,
+          gender: data.gender,
+          skills: data.skills,
+          college: data.college,
+          year: data.year,
+          branch: data.branch,
+          linkedin: data.linkedin,
+          github: data.github,
+          role: data.role,
+          password: '',
+          confirmPassword: '',
+          avatar: data.avatar,
+        });
+      })
+      .catch((error) => {
+        console.error('Error fetching user data:', error);
+      });
+  }, [username]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -68,13 +97,17 @@ interface FormErrors {
   const validate = () => {
     const errors: FormErrors = {};
 
-    if (!formData.fullName) {errors.fullName = 'Full Name is required';}
+    if (!formData.fullName) {
+      errors.fullName = 'Full Name is required';
+    }
     if (!formData.email) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = 'Email address is invalid';
     }
-    if (!formData.password) {errors.password = 'Password is required';}
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
     if (formData.password !== formData.confirmPassword) {
       errors.confirmPassword = 'Passwords do not match';
     }
@@ -86,45 +119,42 @@ interface FormErrors {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validate()) {
-      // Handle successful form submission
-      console.log('Form submitted successfully:', formData);
+      fetch(`http://localhost:3000/api/user/editProfile/${formData.username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log('Form submitted successfully:', data);
+          // Navigate to another page or show a success message
+        })
+        .catch((error) => {
+          console.error('Error submitting form:', error);
+        });
     }
   };
 
   const handleBackClick = () => {
     navigate('/'); // Navigate to the home page
   };
- 
 
   const handleSkillChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const newSkills = [...formData.skills];
     newSkills[index] = e.target.value;
     setFormData({ ...formData, skills: newSkills });
   };
-  
+
   const addSkill = () => {
     setFormData({ ...formData, skills: [...formData.skills, ''] });
   };
-  
+
   const removeSkill = (index: number) => {
     const newSkills = formData.skills.filter((_, i) => i !== index);
     setFormData({ ...formData, skills: newSkills });
   };
-  
-                                      // Fetching data from API
-  
-  // fetch(`http://localhost:3000/api/user/editProfile/${Username}`, {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   }
-  // })
-  //   .then(response => response.json())
-  //   .then(data => console.log(data))
-  //   .catch(error => console.error('Error:', error));
-  
-
-
 
   return (
     <div className="bg-black flex flex-col justify-center items-center space-y-4 min-h-screen p-6">
@@ -159,7 +189,7 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.fullName ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="Name"
+              name="fullName"
               value={formData.fullName}
               onChange={handleChange}
               placeholder="Full Name"
@@ -170,7 +200,7 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.email ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="Email"
+              name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="E-mail"
@@ -181,47 +211,45 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Gender"
+              name="gender"
               value={formData.gender}
               onChange={handleChange}
               placeholder="Gender"
               required
             />
           </div>
-                  <div className="col-span-2 md:col-span-1">
-                    {formData.skills.map((skill, index) => (
-                    <div key={index} className="flex items-center mb-2">
-                    <input
-                    className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-                    name={`skill-${index}`}
-                    value={skill}
-                    onChange={(e) => handleSkillChange(e, index)}
-                    placeholder={`Skill ${index + 1}`}
-                    required
-              />
-              {formData.skills.length > 1 && (
+          <div className="col-span-2 md:col-span-1">
+            {formData.skills.map((skill, index) => (
+              <div key={index} className="flex items-center mb-2">
+                <input
+                  className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+                  name={`skill-${index}`}
+                  value={skill}
+                  onChange={(e) => handleSkillChange(e, index)}
+                  placeholder="Skill"
+                  required
+                />
                 <button
                   type="button"
+                  className="ml-2 bg-red-500 text-white rounded px-2 py-1"
                   onClick={() => removeSkill(index)}
-                  className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
                 >
                   Remove
                 </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addSkill}
-            className="mt-2 bg-blue-500 text-white px-3 py-2 rounded"
-          >
-            Add Skill
-          </button>
-</div>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="mt-2 bg-green-500 text-white rounded px-2 py-1"
+              onClick={addSkill}
+            >
+              Add Skill
+            </button>
+          </div>
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="College"
+              name="college"
               value={formData.college}
               onChange={handleChange}
               placeholder="College"
@@ -231,7 +259,7 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Year"
+              name="year"
               value={formData.year}
               onChange={handleChange}
               placeholder="Year"
@@ -241,7 +269,7 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Branch"
+              name="branch"
               value={formData.branch}
               onChange={handleChange}
               placeholder="Branch"
@@ -251,7 +279,7 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="LinkedIn"
+              name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
               placeholder="LinkedIn"
@@ -261,17 +289,17 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Github"
+              name="github"
               value={formData.github}
               onChange={handleChange}
-              placeholder="Github"
+              placeholder="GitHub"
               required
             />
           </div>
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Role"
+              name="role"
               value={formData.role}
               onChange={handleChange}
               placeholder="Role"
@@ -281,11 +309,11 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.password ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="Password"
+              type="password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              type="password"
               required
             />
             {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
@@ -293,24 +321,31 @@ interface FormErrors {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.confirmPassword ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="ConfirmPassword"
+              type="password"
+              name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
               placeholder="Confirm Password"
-              type="password"
               required
             />
             {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
           </div>
         </div>
 
-        {/* Back and Save Button */}
-        <div className="flex justify-between flex-row w-full mt-8">
-          <button type="button" onClick={handleBackClick} className="bg-black text-white rounded-full px-6 py-2 hover:bg-gray-800">
-            BACK
+        {/* Submit Button */}
+        <div className="w-full flex justify-between items-center mt-4">
+          <button
+            type="button"
+            onClick={handleBackClick}
+            className="bg-yellow-500 text-white px-4 py-2 rounded"
+          >
+            Back
           </button>
-          <button type="submit" className="bg-black text-white rounded-full px-6 py-2 hover:bg-gray-800">
-            SAVE
+          <button
+            type="submit"
+            className="bg-green-500 text-white px-4 py-2 rounded"
+          >
+            Save Changes
           </button>
         </div>
       </form>

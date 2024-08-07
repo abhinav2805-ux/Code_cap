@@ -134,12 +134,12 @@ exports.findUsers = async (req, res) => {
       // Construct a query object based on available parameters
       let query = {};
 
-      if (Gender) query.Gender = Gender;
-      if (Year) query.Year = Year;
-      if (College) query.College = College;
-      if (Branch) query.Branch = Branch;
+      if (Gender) {query.Gender = Gender;
+  }    if (Year){ query.Year = Year;
+     } if (College){ query.College = College;}
+      if (Branch) {query.Branch = Branch;
 
-      if (regex) {
+ }     if (regex) {
         query.$or = [
             { Name: regex },
             { Role: regex },

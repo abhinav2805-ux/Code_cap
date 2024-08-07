@@ -44,7 +44,7 @@ const FindTeamMates: React.FC = () =>  {
         </div>
 
         {/* //filter */}
-        <div className='w-full h-[10%] mt-[60px] mb-3 p-3'>
+        <div className='w-full h-[10%] md:mt-[30px] mt-[10px] mb-3 p-3'>
           <div className='w-full h-full border-4 border-zinc-100 flex rounded-xl'>
             <div className='h-full w-[10%] md:w-[5%] flex justify-center items-center'>
               <SearchIcon className='text-white' />
