@@ -8,7 +8,7 @@ import FindTeamMates from './components/FindTeamMates';
 import About from './About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import EditProfile from './components/Editprofile';
+import EditProfile from './components/EditProfile';
 import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
 const App: React.FC = () => {
