@@ -32,7 +32,7 @@ const Navbar: React.FC = () => {
 
           <a href="/Home" className="text-yellow-500 text-2xl font-medium">HOME</a>
           <a href="/buildteam" className="hover:text-yellow-500 text-2xl font-medium">TEAM</a>
-          <a href="#" className="hover:text-yellow-500 text-2xl font-medium">HACKATHONS</a>
+          <a href="/hackathons" className="hover:text-yellow-500 text-2xl font-medium">HACKATHONS</a>
           <a href="/about" className="hover:text-yellow-500 text-2xl font-medium">ABOUT</a>
         </div>
         <div className=" w-10 h-10 hidden rounded-full overflow-hidden md:flex justify-center items-center border-2 border-green-500 ">
@@ -63,7 +63,7 @@ const Navbar: React.FC = () => {
         <div className="flex flex-col items-center space-y-8 mt-20">
           <a href="/Home" className="text-yellow-500 text-xl font-medium" onClick={closeSidebar}>HOME</a>
           <a href="/buildteam" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>TEAM</a>
-          <a href="#" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>HACKATHONS</a>
+          <a href="/hackathons" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>HACKATHONS</a>
           <a href="/about" className="text-white text-xl font-medium hover:text-yellow-500" onClick={closeSidebar}>ABOUT</a>
           <div className="text-white text-xl font-medium hover:text-yellow-500">
             <h2 className="text-white text-xl font-medium hover:text-yellow-500">PROFILE</h2>

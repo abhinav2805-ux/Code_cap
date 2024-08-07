@@ -33,7 +33,7 @@ function EditProfile() {
     password: '',
     confirmPassword: '',
     avatar: 'https://avatars.githubusercontent.com/u/114240845?s=400&u=c23a378d6835e8379337c1e3be9a6ff61cf7aa71&v=4',
-  });
+});
 
 interface FormErrors {
   fullName?: string;
