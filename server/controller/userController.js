@@ -47,13 +47,19 @@ exports.signUp=async(req,res)=>{
            // console.log(salt);
            bcrypt.hash(Password,salt,async (err,hash)=>{
               //  console.log(hash);
-                
-                let createdUser=await userModel.create({
+              let createdUser
+                try {
+                    createdUser=await userModel.create({
                     Name,
                     Username,
                     Email,
                     Password:hash
                 })
+                } catch (error) {
+                  console.log(error);
+                  return res.status(500).json({"msg":"Error"})
+                }
+               
                 const uid=createdUser._id;
                 const payload = { user: { id: uid } };
                 jwt.sign(
@@ -64,11 +70,11 @@ exports.signUp=async(req,res)=>{
                       if (err) throw err;
                       res.cookie('token', token, {
                         httpOnly: true,
-                        // secure: process.env.NODE_ENV === 'production',
-                        // sameSite: 'Strict',
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'Strict',
                         maxAge: 3600000, // 1 hour
                       });
-                      return res.status(200).json({ token, user: createdUser });
+                      return res.status(200).json({ token, user:createdUser.Username });
                     }
                 );
                 
@@ -76,13 +82,14 @@ exports.signUp=async(req,res)=>{
         })
     } catch (error) {
         console.log(error);
-        return res.status(500).json({"msg":"There was some error"})
+        return res.status(500).json({msg:"There was some error"})
     }
 }
 
 exports.signIn=async (req, res) => {
     const { Username, Password } = req.body;
-  
+    console.log("signin");
+    
     try {
       let user = await userModel.findOne({ Username });
       if (!user) {
@@ -104,11 +111,12 @@ exports.signIn=async (req, res) => {
           if (err) throw err;
           res.cookie('token', token, {
             httpOnly: true,
-            // secure: process.env.NODE_ENV === 'production',
-            // sameSite: 'Strict',
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
             maxAge: 3600000, // 1 hour
           });
-          return res.status(200).json({ token, user });
+          //console.log(user.Username);
+          return res.status(200).json({ token, username:user.Username});
         }
       );
     } catch (err) {
