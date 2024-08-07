@@ -113,15 +113,15 @@ interface FormErrors {
   
                                       // Fetching data from API
   
-  fetch(`http://localhost:3000/api/user/editProfile/${Username}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch(error => console.error('Error:', error));
+  // fetch(`http://localhost:3000/api/user/editProfile/${Username}`, {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   }
+  // })
+  //   .then(response => response.json())
+  //   .then(data => console.log(data))
+  //   .catch(error => console.error('Error:', error));
   
 
 

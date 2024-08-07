@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
         </div>
 
 
-        <div className="hidden mr-24 md:flex space-x-8">
+        <div className="hidden mr-44 md:flex space-x-8">
 
           <a href="/Home" className="text-yellow-500 text-2xl font-medium">HOME</a>
           <a href="/buildteam" className="hover:text-yellow-500 text-2xl font-medium">TEAM</a>
