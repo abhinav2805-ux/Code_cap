@@ -11,6 +11,7 @@ import Footer from './components/Footer';
 import EditProfile from './components/Editprofile';
 import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
+import { Toaster } from './components/ui/toaster';
 const App: React.FC = () => {
     return (
         <Router>
@@ -42,6 +43,7 @@ const Layout: React.FC = () => {
                     <Route path="/hackathons" element={<Hackathons />} />
                 </Routes>
             </main>
+            <Toaster/>
             <Footer />
         </div>
     );

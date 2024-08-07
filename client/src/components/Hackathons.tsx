@@ -15,7 +15,7 @@ function Hackathons() {
   
     const cardsData = [
         {
-          imageUrl: '/public/hacks/hack1.jpg',
+          imageUrl: '/hacks/hack1.jpg',
           name: 'Event 1',
           host: 'Host 1',
           date: '2024-07-22',
@@ -23,7 +23,7 @@ function Hackathons() {
           registrationPrice: '$50',
         },
         {
-          imageUrl: '/public/hacks/hack2.jpg',
+          imageUrl: '/hacks/hack2.jpg',
           name: 'Event 2',
           host: 'Host 2',
           date: '2024-08-15',
@@ -31,7 +31,7 @@ function Hackathons() {
           registrationPrice: '$75',
         },
         {
-          imageUrl: '/public/hacks/hack3.jpg',
+          imageUrl: '/hacks/hack3.jpg',
           name: 'Event 3',
           host: 'Host 3',
           date: '2024-08-15',
@@ -39,7 +39,7 @@ function Hackathons() {
           registrationPrice: '$75',
         },
         {
-          imageUrl: '/public/hacks/hack4.jpg',
+          imageUrl: '/hacks/hack4.jpg',
           name: 'Event 4',
           host: 'Host 4',
           date: '2024-08-15',
@@ -47,7 +47,7 @@ function Hackathons() {
           registrationPrice: '$75',
         },
         {
-          imageUrl: '/public/hacks/hack5.jpg',
+          imageUrl: '/hacks/hack5.jpg',
           name: 'Event 5',
           host: 'Host 5',
           date: '2024-08-15',
