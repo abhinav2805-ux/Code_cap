@@ -10,6 +10,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 
+
+
 const FindTeamMates: React.FC = () =>  {
   const [value, setValue] = useState('');
   const [showOptions, setShowOptions] = useState(false);
@@ -21,6 +23,17 @@ const FindTeamMates: React.FC = () =>  {
     setShowOptions(false);
   };
 
+//   GET
+// findUsers
+// http://localhost:3000/api/user/findUsers?Text=web ﻿
+// Query Params
+// Text
+// web
+// Gender
+// Male
+// Role
+// web
+  
   return (
     <>
       <div className='w-full h-screen px-4 md:px-[250px]  bg-black'>
