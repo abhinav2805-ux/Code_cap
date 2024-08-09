@@ -17,12 +17,6 @@ const Navbar: React.FC = () => {
   };
 
 
-
-
-  
-
-  const [isOpen, setIsOpen] = useState(false);
-
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
