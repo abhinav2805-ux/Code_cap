@@ -66,7 +66,9 @@ const FindTeamMates: React.FC = () => {
   const handleSearch = async () => {
     try {
       const params = new URLSearchParams({ Text: value, ...selectedFilters }).toString();
-      const response = await fetch(`http://localhost:3000/api/user/findUsers?Text=${params}`);
+      const response = await fetch(`http://localhost:3000/api/user/findUsers?${params}`, {
+        credentials: 'include', // Include credentials (cookies)
+      });
 
       if (response.ok) {
         const data = await response.json();

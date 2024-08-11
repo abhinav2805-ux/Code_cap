@@ -47,6 +47,7 @@ const LoginForm: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formState),
+        credentials: 'include'
       });
 
       if (response.ok) {
