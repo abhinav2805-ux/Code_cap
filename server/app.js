@@ -10,10 +10,12 @@ const eventRouter = require('./routes/eventRouter');
 
 
 app.use(cors({
-    origin: '*',
+    origin: ' http://localhost:5173', // Replace with your frontend URL
     methods: ['GET', 'POST'],
+    credentials: true, // Allow credentials (cookies)
     allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
 app.use(express.json())
 app.use(cookieParser());
 app.use(express.urlencoded({extended:true}))
