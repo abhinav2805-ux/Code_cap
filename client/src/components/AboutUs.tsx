@@ -1,4 +1,5 @@
 import React from 'react';
+import SupportUs from './SupportUs';
 
 const teamMembers = [
   {
@@ -9,7 +10,7 @@ const teamMembers = [
     image: "/Ellipse 22.svg",
   },
   {
-    name: "Ashwin",
+    name: "Ashwin Bansal",
     title: "Backend Developer",
     description:
       "I am the backend developer for this project. I focus on creating a robust and scalable infrastructure to support our applications. My goal is to ensure that our backend systems are efficient and reliable.",
@@ -111,22 +112,7 @@ function AboutUs() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-12">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-yellow-400">THANK YOU</span> FOR YOUR SUPPORT
-          </h2>
-          <p className="mb-6 text-base md:text-xl font-semibold">
-            If you <span className="text-yellow-400">liked</span> our hard work
-            and tool, you can show us support by
-            <span className="text-yellow-400">donating</span> to us. It will
-            help us to{" "}
-            <span className="text-yellow-400">maintain this website</span> and
-            take it globally.
-          </p>
-          <button className="bg-yellow-400 text-black py-2 px-4 rounded-lg text-base md:text-xl">
-            BUY US A COFFEE
-          </button>
-        </div>
+        <SupportUs/>
       </div>
     </div>
   );
