@@ -47,32 +47,58 @@ function EditProfile() {
   const navigate = useNavigate();
   const { username } = useParams<{ username: string }>(); // Get the username from the URL params
 
+
+  function getCookieValue(name:any) {
+    // Split the document.cookie string into individual cookies
+    const cookies = document.cookie.split('; ');
+  
+    // Iterate over the cookies
+    for (let cookie of cookies) {
+      // Split each cookie into its name and value
+      const [cookieName, cookieValue] = cookie.split('=');
+  
+      // Check if the current cookie's name matches the desired name
+      if (cookieName === name) {
+        // Return the decoded value of the cookie
+        return decodeURIComponent(cookieValue);
+      }
+    }
+  
+    // Return null if the cookie is not found
+    return null;
+  }
+
   useEffect(() => {
     // Fetch user data from the backend
-    fetch(`http://localhost:3000/api/user/getProfile/${username}`)
+    const username = getCookieValue('user');
+console.log(username);
+    fetch(`http://localhost:3000/api/user/getProfile/${username}`,{
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((data) => {
         setFormData({
-          username: data.username, // Add username to the state
-          fullName: data.fullName,
-          email: data.email,
-          gender: data.gender,
-          skills: data.skills,
-          college: data.college,
-          year: data.year,
-          branch: data.branch,
-          linkedin: data.linkedin,
-          github: data.github,
-          role: data.role,
+          username: data[0].Username, // Add username to the state
+          fullName: data[0].Name,
+          email: data[0].Email,
+          gender: data[0].Gender,
+          skills: data[0].Skills || [],
+          college: data[0].College,
+          year: data[0].Year,
+          branch: data[0].Branch,
+          linkedin: data[0].LinkedIn,
+          github: data[0].Github,
+          role: data[0].Role,
           password: '',
           confirmPassword: '',
           avatar: data.avatar,
         });
+        console.log(data);
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
       });
-  }, [username]);
+  },[]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -189,10 +215,10 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.fullName ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="fullName"
+              name="Name"
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="Full Name"
+           //   placeholder="Full Name"
               required
             />
             {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
@@ -200,7 +226,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.email ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="email"
+              name="Email"
               value={formData.email}
               onChange={handleChange}
               placeholder="E-mail"
@@ -211,7 +237,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="gender"
+              name="Gender"
               value={formData.gender}
               onChange={handleChange}
               placeholder="Gender"
@@ -223,7 +249,7 @@ function EditProfile() {
               <div key={index} className="flex items-center mb-2">
                 <input
                   className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-                  name={`skill-${index}`}
+                  name={`Skill-${index}`}
                   value={skill}
                   onChange={(e) => handleSkillChange(e, index)}
                   placeholder="Skill"
@@ -249,7 +275,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="college"
+              name="College"
               value={formData.college}
               onChange={handleChange}
               placeholder="College"
@@ -259,7 +285,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="year"
+              name="Year"
               value={formData.year}
               onChange={handleChange}
               placeholder="Year"
@@ -269,7 +295,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="branch"
+              name="Branch"
               value={formData.branch}
               onChange={handleChange}
               placeholder="Branch"
@@ -279,7 +305,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="linkedin"
+              name="LinkedIn"
               value={formData.linkedin}
               onChange={handleChange}
               placeholder="LinkedIn"
@@ -289,7 +315,7 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="github"
+              name="Github"
               value={formData.github}
               onChange={handleChange}
               placeholder="GitHub"
@@ -299,10 +325,10 @@ function EditProfile() {
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="role"
+              name="Role"
               value={formData.role}
               onChange={handleChange}
-              placeholder="Role"
+            //  placeholder="Role"
               required
             />
           </div>
@@ -310,7 +336,7 @@ function EditProfile() {
             <input
               className={`w-full border-2 ${errors.password ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
               type="password"
-              name="password"
+              name="Password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
