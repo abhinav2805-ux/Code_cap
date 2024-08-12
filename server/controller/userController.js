@@ -74,6 +74,12 @@ exports.signUp=async(req,res)=>{
                         sameSite: 'Strict',
                         maxAge: 3600000, // 1 hour
                       });
+                      res.cookie('user', Username, {
+                   //     httpOnly: true,
+                        secure: process.env.NODE_ENV === 'production',
+                        sameSite: 'Strict',
+                        maxAge: 3600000, // 1 hour
+                      });
                       return res.status(200).json({ token, user:createdUser.Username });
                     }
                 );
@@ -109,8 +115,15 @@ exports.signIn=async (req, res) => {
         { expiresIn: '1h' },
         (err, token) => {
           if (err) throw err;
+          
           res.cookie('token', token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 3600000, // 1 hour
+          });
+          res.cookie('user', Username, {
+          //  httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             maxAge: 3600000, // 1 hour
@@ -126,12 +139,23 @@ exports.signIn=async (req, res) => {
   };
 
   exports.signout = (req, res) => {
-    res.clearCookie('token', {
+    try {
+      res.clearCookie('token', {
         httpOnly: true,
-        //secure: process.env.NODE_ENV === 'production',
-        //sameSite: 'Strict',
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
     });
+    res.clearCookie('user', {
+    //  httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'Strict',
+  });
     return res.status(200).json({ msg: 'Successfully logged out' });
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({msg: "Trouble logging out"})
+    }
+  
 };
 
 exports.findUsers = async (req, res) => {
