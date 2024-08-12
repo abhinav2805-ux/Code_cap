@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import CheckIcon from "@mui/icons-material/Check";
 import Profile from "./Profile";
 import Profile2 from "./Profile2";
 import {
@@ -27,6 +28,7 @@ const FindTeamMates: React.FC = () => {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string>>({});
   const [customCollege, setCustomCollege] = useState("");
   const [profiles, setProfiles] = useState<Profile[]>([]);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const options = ["Gender", "Year", "College", "Branch", "Status"];
 
@@ -50,8 +52,6 @@ const FindTeamMates: React.FC = () => {
       ...prev,
       [option]: subOption,
     }));
-    setShowOptions(false);
-    setSelectedOption(null);
   };
 
   const handleCustomCollegeSubmit = () => {
@@ -65,27 +65,46 @@ const FindTeamMates: React.FC = () => {
 
   const handleSearch = async () => {
     try {
-      const params = new URLSearchParams({ Text: value, ...selectedFilters }).toString();
-      const response = await fetch(`http://localhost:3000/api/user/findUsers?${params}`, {
-        credentials: 'include', // Include credentials (cookies)
+      // If no search value and no filters, fetch all profiles
+      const params = value || filterCount > 0 ? new URLSearchParams({ Text: value, ...selectedFilters }).toString() : '';
+      const url = `http://localhost:3000/api/user/findUsers?${params}`;
+      const response = await fetch(url, {
+        credentials: "include", // Include credentials (cookies)
       });
-
+      console.log(url);
+  
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         setProfiles(data); // Update profiles state with the fetched data
       } else {
-        console.error("Failed to fetch profiles",response);
+        console.error("Failed to fetch profiles", response);
       }
     } catch (error) {
       console.error("An error occurred:", error);
     }
   };
+  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       handleSearch();
     }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (!filterRef.current?.contains(e.relatedTarget as Node)) {
+      setShowOptions(false);
+      setSelectedOption(null);
+    }
+  };
+
+  const filterCount = Object.keys(selectedFilters).length;
+
+  const clearFilters = () => {
+    setSelectedFilters({});
+    setCustomCollege("");
+    setSelectedOption(null);
   };
 
   return (
@@ -101,8 +120,26 @@ const FindTeamMates: React.FC = () => {
           </h3>
         </div>
 
+        {/* Selected Filters Display */}
+        <div className="w-full p-2 bg-slate-950 rounded-xl mb-3">
+          {filterCount > 0 ? (
+            <div className="text-white text-sm md:text-lg flex flex-wrap gap-2">
+              {Object.entries(selectedFilters).map(([key, value], index) => (
+                <div
+                  key={index}
+                  className="bg-yellow-500 text-black font-bold px-3 py-1 rounded-full"
+                >
+                  {key}: {value}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-white text-sm md:text-lg">No filters applied</div>
+          )}
+        </div>
+
         {/* Search and Filter Section */}
-        <div className="w-full h-[10%] md:mt-[60px] mt-[10px] mb-3 p-3">
+        <div className="w-full h-[10%] md:mt-[20px] mt-[10px] mb-3 p-3 relative">
           <div className="w-full h-full border-4 border-zinc-100 flex rounded-xl">
             <div className="h-full w-[10%] md:w-[5%] flex justify-center items-center">
               <SearchIcon className="text-white" />
@@ -125,18 +162,26 @@ const FindTeamMates: React.FC = () => {
                 Search
               </button>
             </div>
-            <div className="h-full w-[20%] md:w-[10%] flex justify-center bg-white items-center">
+            <div className="h-full w-[20%] md:w-[10%] flex justify-center bg-white items-center relative">
               <button
                 className="bg-white w-full h-full text-lg md:text-2xl font-semibold px-3 text-black rounded-r-xl"
                 onClick={() => setShowOptions(!showOptions)}
               >
                 Filter
               </button>
+              {filterCount > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs md:text-sm w-6 h-6 flex items-center justify-center">
+                  {filterCount}
+                </span>
+              )}
             </div>
           </div>
           {showOptions && (
             <div
-              className="absolute right-4 md:right-[100px] mt-2 text-sm md:text-xl font-medium bg-white rounded-xl px-4 py-2 shadow-lg"
+              ref={filterRef}
+              tabIndex={0}
+              onBlur={handleBlur}
+              className="absolute right-4 md:right-[100px] mt-2 text-sm md:text-xl font-medium bg-white rounded-xl px-4 py-2 shadow-lg z-50"
               style={{
                 width: "250px",
                 maxHeight: "300px",
@@ -172,15 +217,24 @@ const FindTeamMates: React.FC = () => {
                     subOptions[option]?.map((subOption, subIndex) => (
                       <div
                         key={subIndex}
-                        className="ml-4 p-2 bg-blue-100 hover:bg-gray-200 cursor-pointer rounded"
+                        className="ml-4 p-2 bg-blue-100 hover:bg-gray-200 cursor-pointer rounded flex justify-between items-center"
                         onClick={() => handleSubOptionClick(option, subOption)}
                       >
                         {subOption}
+                        {selectedFilters[option] === subOption && (
+                          <CheckIcon className="text-green-600" />
+                        )}
                       </div>
                     ))
                   )}
                 </div>
               ))}
+              <button
+                className="mt-4 bg-red-500 text-white p-2 rounded w-full"
+                onClick={clearFilters}
+              >
+                Clear Filters
+              </button>
             </div>
           )}
         </div>
