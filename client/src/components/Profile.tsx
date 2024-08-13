@@ -15,7 +15,7 @@ const Profile: React.FC<ProfileProps> = ({ name, year, skills, gender, imageSrc 
     <div className="w-full flex flex-col md:flex-row md:h-[100px] bg-gray-600 rounded-t-xl p-2 md:p-0">
       <div className="flex justify-between md:justify-center items-center w-full md:w-[10%] h-[50px] md:h-full">
         <Avatar>
-          <AvatarImage src={imageSrc} />
+          <AvatarImage src={`https://avatars.githubusercontent.com/${imageSrc}`} />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
         <div className="block md:hidden">
