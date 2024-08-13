@@ -1,5 +1,4 @@
-"use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CheckIcon from "@mui/icons-material/Check";
 import Profile from "./Profile";
@@ -39,6 +38,27 @@ const FindTeamMates: React.FC = () => {
     Status: ["Available", "Unavailable"],
   };
 
+  useEffect(() => {
+    // Fetch default profiles when the component mounts
+    const fetchDefaultProfiles = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/user/findUsers", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setProfiles(data);
+        } else {
+          console.error("Failed to fetch default profiles", response);
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    fetchDefaultProfiles();
+  }, []);
+
   const handleOptionClick = (option: string) => {
     if (selectedOption === option) {
       setSelectedOption(null);
@@ -65,18 +85,17 @@ const FindTeamMates: React.FC = () => {
 
   const handleSearch = async () => {
     try {
-      // If no search value and no filters, fetch all profiles
       const params = value || filterCount > 0 ? new URLSearchParams({ Text: value, ...selectedFilters }).toString() : '';
       const url = `http://localhost:3000/api/user/findUsers?${params}`;
       const response = await fetch(url, {
-        credentials: "include", // Include credentials (cookies)
+        credentials: "include", 
       });
       console.log(url);
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        setProfiles(data); // Update profiles state with the fetched data
+        setProfiles(data); 
       } else {
         console.error("Failed to fetch profiles", response);
       }
@@ -84,7 +103,6 @@ const FindTeamMates: React.FC = () => {
       console.error("An error occurred:", error);
     }
   };
-  
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -110,7 +128,6 @@ const FindTeamMates: React.FC = () => {
   return (
     <>
       <div className="w-full h-screen px-4 md:px-[250px] bg-black">
-        {/* Find */}
         <div className="w-full h-[15%] p-4">
           <h1 className="text-center text-3xl md:text-5xl font-bold text-white">
             FIND YOUR TEAM MATES
@@ -120,7 +137,6 @@ const FindTeamMates: React.FC = () => {
           </h3>
         </div>
 
-        {/* Selected Filters Display */}
         <div className="w-full p-2 bg-slate-950 rounded-xl mb-3">
           {filterCount > 0 ? (
             <div className="text-white text-sm md:text-lg flex flex-wrap gap-2">
@@ -138,7 +154,6 @@ const FindTeamMates: React.FC = () => {
           )}
         </div>
 
-        {/* Search and Filter Section */}
         <div className="w-full h-[10%] md:mt-[20px] mt-[10px] mb-3 p-3 relative">
           <div className="w-full h-full border-4 border-zinc-100 flex rounded-xl">
             <div className="h-full w-[10%] md:w-[5%] flex justify-center items-center">
@@ -239,7 +254,6 @@ const FindTeamMates: React.FC = () => {
           )}
         </div>
 
-        {/* Display Profiles */}
         <div className="w-full h-[75%] bg-black px-2 md:px-8 overflow-y-auto">
           <Accordion type="single" collapsible className="w-full">
             {profiles.map((profile, index) => (
@@ -247,10 +261,10 @@ const FindTeamMates: React.FC = () => {
                 <AccordionTrigger>
                   <Profile
                     name={profile.Name}
-                    year="Unknown" // Replace with actual year if available
+                    year="Unknown" 
                     skills={profile.Skill}
                     gender={profile.Gender}
-                    imageSrc={`https://avatars.githubusercontent.com/${profile.Github}`} // Replace with actual image URL
+                    imageSrc={`https://avatars.githubusercontent.com/${profile.Github}`}
                   />
                 </AccordionTrigger>
                 <AccordionContent>
