@@ -45,40 +45,29 @@ function EditProfile() {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
-  const { username } = useParams<{ username: string }>(); // Get the username from the URL params
+  const { username } = useParams<{ username: string }>();
 
-
-  function getCookieValue(name:any) {
-    // Split the document.cookie string into individual cookies
+  function getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
-  
-    // Iterate over the cookies
     for (let cookie of cookies) {
-      // Split each cookie into its name and value
       const [cookieName, cookieValue] = cookie.split('=');
-  
-      // Check if the current cookie's name matches the desired name
       if (cookieName === name) {
-        // Return the decoded value of the cookie
         return decodeURIComponent(cookieValue);
       }
     }
-  
-    // Return null if the cookie is not found
     return null;
   }
 
   useEffect(() => {
-    // Fetch user data from the backend
     const username = getCookieValue('user');
-console.log(username);
-    fetch(`http://localhost:3000/api/user/getProfile/${username}`,{
+    console.log(username);
+    fetch(`http://localhost:3000/api/user/getProfile/${username}`, {
       credentials: 'include'
     })
       .then((response) => response.json())
       .then((data) => {
         setFormData({
-          username: data[0].Username, // Add username to the state
+          username: data[0].Username,
           fullName: data[0].Name,
           email: data[0].Email,
           gender: data[0].Gender,
@@ -98,13 +87,34 @@ console.log(username);
       .catch((error) => {
         console.error('Error fetching user data:', error);
       });
-  },[]);
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+
+    if (name === 'skills') {
+      return; // Skills are handled separately
+    }
+
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const handleSkillChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
+    const newSkills = [...formData.skills];
+    newSkills[index] = e.target.value;
+    setFormData({ ...formData, skills: newSkills });
+  };
+
+  const addSkill = () => {
+    setFormData({ ...formData, skills: [...formData.skills, ''] });
+  };
+
+  const removeSkill = (index: number) => {
+    const newSkills = formData.skills.filter((_, i) => i !== index);
+    setFormData({ ...formData, skills: newSkills });
   };
 
   const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -144,13 +154,30 @@ console.log(username);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+   // console.log(formData);
+    const userData={
+      Name: formData.username,
+      Username:formData.username,
+      Email:formData.email,
+      Gender:formData.gender,
+      College:formData.college,
+      Branch:formData.branch,
+      Github:formData.github,
+      LinkedIn:formData.linkedin,
+      Role: formData.role,
+      Skill: formData.skills,
+      Year: formData.year
+    }
+    console.log(userData);
+    
     if (validate()) {
       fetch(`http://localhost:3000/api/user/editProfile/${formData.username}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        credentials: 'include',
+        body: JSON.stringify(userData),
       })
         .then((response) => response.json())
         .then((data) => {
@@ -167,30 +194,13 @@ console.log(username);
     navigate('/'); // Navigate to the home page
   };
 
-  const handleSkillChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
-    const newSkills = [...formData.skills];
-    newSkills[index] = e.target.value;
-    setFormData({ ...formData, skills: newSkills });
-  };
-
-  const addSkill = () => {
-    setFormData({ ...formData, skills: [...formData.skills, ''] });
-  };
-
-  const removeSkill = (index: number) => {
-    const newSkills = formData.skills.filter((_, i) => i !== index);
-    setFormData({ ...formData, skills: newSkills });
-  };
-
   return (
     <div className="bg-black flex flex-col justify-center items-center space-y-4 min-h-screen p-6">
-      {/* Header */}
       <div className="flex flex-row text-white gap-2 mb-4">
         <h1 className="text-white text-5xl font-semibold">EDIT</h1>
         <h1 className="text-yellow-500 text-5xl font-semibold">PROFILE</h1>
       </div>
 
-      {/* Profile Edit Form */}
       <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col items-center w-full max-w-md md:max-w-2xl shadow-lg space-y-4">
         
         <div className="relative w-24 h-24 mb-4">
@@ -210,15 +220,14 @@ console.log(username);
           />
         </div>
 
-        {/* Input Fields */}
         <div className="grid grid-cols-2 gap-4 w-full">
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.fullName ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="Name"
+              name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-           //   placeholder="Full Name"
+              placeholder="Full Name"
               required
             />
             {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
@@ -226,7 +235,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className={`w-full border-2 ${errors.email ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
-              name="Email"
+              name="email"
               value={formData.email}
               onChange={handleChange}
               placeholder="E-mail"
@@ -237,7 +246,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Gender"
+              name="gender"
               value={formData.gender}
               onChange={handleChange}
               placeholder="Gender"
@@ -249,7 +258,6 @@ console.log(username);
               <div key={index} className="flex items-center mb-2">
                 <input
                   className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-                  name={`Skill-${index}`}
                   value={skill}
                   onChange={(e) => handleSkillChange(e, index)}
                   placeholder="Skill"
@@ -275,7 +283,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="College"
+              name="college"
               value={formData.college}
               onChange={handleChange}
               placeholder="College"
@@ -285,7 +293,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Year"
+              name="year"
               value={formData.year}
               onChange={handleChange}
               placeholder="Year"
@@ -295,7 +303,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Branch"
+              name="branch"
               value={formData.branch}
               onChange={handleChange}
               placeholder="Branch"
@@ -305,7 +313,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="LinkedIn"
+              name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
               placeholder="LinkedIn"
@@ -315,7 +323,7 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Github"
+              name="github"
               value={formData.github}
               onChange={handleChange}
               placeholder="GitHub"
@@ -325,10 +333,10 @@ console.log(username);
           <div className="col-span-2 md:col-span-1">
             <input
               className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-              name="Role"
+              name="role"
               value={formData.role}
               onChange={handleChange}
-            //  placeholder="Role"
+              placeholder="Role"
               required
             />
           </div>
@@ -336,7 +344,7 @@ console.log(username);
             <input
               className={`w-full border-2 ${errors.password ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
               type="password"
-              name="Password"
+              name="password"
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
@@ -358,7 +366,6 @@ console.log(username);
           </div>
         </div>
 
-        {/* Submit Button */}
         <div className="w-full flex justify-between items-center mt-4">
           <button
             type="button"

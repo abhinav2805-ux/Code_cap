@@ -18,6 +18,7 @@ interface Profile {
   Role: string;
   Branch: string;
   College: string;
+  Year: string;
 }
 
 const FindTeamMates: React.FC = () => {
@@ -261,7 +262,7 @@ const FindTeamMates: React.FC = () => {
                 <AccordionTrigger>
                   <Profile
                     name={profile.Name}
-                    year="Unknown" 
+                    year={profile.Year} 
                     skills={profile.Skill}
                     gender={profile.Gender}
                     imageSrc={`https://avatars.githubusercontent.com/${profile.Github}`}
