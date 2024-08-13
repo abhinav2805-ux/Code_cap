@@ -8,7 +8,7 @@ import FindTeamMates from './components/FindTeamMates';
 import About from './About';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import EditProfile from './components/EditProfile';
+import EditProfile from './components/Editprofile';
 import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
 import { Toaster } from './components/ui/toaster';
