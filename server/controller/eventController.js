@@ -34,7 +34,8 @@ const addEvent= async (req,res)=>{
             Mode,
             Image,
             lastDate,
-            teamSize
+            teamSize,
+            URI,
         })
         res.status(200).send(event);
     } catch (error) {

@@ -1,4 +1,4 @@
-import  { useState } from 'react'
+import  { useState,useEffect } from 'react'
 import Card from './FeaturedCard'
 import { SearchIcon } from 'lucide-react';
 function Hackathons() {
@@ -12,7 +12,26 @@ function Hackathons() {
       setValue(option);
       setShowOptions(false);
     };
+    useEffect(() => {
+      // Fetch default profiles when the component mounts
+      const fetchDefaultProfiles = async () => {
+        try {
+          const response = await fetch("http://localhost:3000/api/events/getAllEvents", {
+            credentials: "include",
+          });
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data);            
+          } else {
+            console.error("Failed to fetch default profiles", response);
+          }
+        } catch (error) {
+          console.error("An error occurred:", error);
+        }
+      };
   
+      fetchDefaultProfiles();
+    }, []);
     const cardsData = [
         {
           imageUrl: '/hacks/hack1.jpg',

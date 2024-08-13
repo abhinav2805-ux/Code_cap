@@ -22,16 +22,21 @@ exports.getProfile=async(req,res)=>{
 exports.editProfile=async(req,res)=>{
     try {
         const usern=req.params.username;
+        console.log(usern);
         const update=req.body;
+        console.log(update);
+        
         const options = {
             new: true,
             // upsert: true,    set to true for api testing only        
             runValidators: true
         };
         const updatedUser = await userModel.findOneAndUpdate({ Username:usern }, update, options);
-        // if (!updatedUser) {
-        //     return res.status(404).json({ message: 'User not found' });
-        // }
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        console.log(updatedUser);
+        
         res.status(200).json(updatedUser);
     } catch (error) {
         console.log(error);
@@ -186,7 +191,8 @@ exports.findUsers = async (req, res) => {
       Role: 1,
       Username: 1,
       College: 1,
-      Branch: 1
+      Branch: 1,
+      Year: 1,
   };
       // Execute the database query
       const users = await userModel.find(query).select(projection);

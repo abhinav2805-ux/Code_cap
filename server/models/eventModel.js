@@ -19,6 +19,10 @@ const eventSchema=mongoose.Schema({
     teamSize:{
         type: Number,
         default:"TBD"
+    },
+    URI:{
+        type: String,
+        default: ""
     }
 })
 
