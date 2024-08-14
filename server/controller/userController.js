@@ -22,8 +22,26 @@ exports.getProfile=async(req,res)=>{
 exports.editProfile=async(req,res)=>{
     try {
         const usern=req.params.username;
+        const user=await userModel.find({Username:usern});
+        if(!user){
+          return res.status(404).json({msg:"User Not Found"})
+        }
         console.log(usern);
         const update=req.body;
+         const pw=update.Password;
+        //  console.log(update);
+        //  console.log(user);
+        //  console.log(pw);
+        // console.log(user[0].Password);
+        const isMatch = await bcrypt.compare(pw, user[0].Password);
+      if (!isMatch) {
+        return res.status(400).json({ msg: 'Invalid Credentials' });
+      }
+    //   Object.keys(update).forEach(key => {
+    //     if (key == 'Name' || key=='Gender'  && typeof update[key] === 'string') {
+    //         update[key] = update[key].toLowerCase();
+    //     }
+    // });
         console.log(update);
         
         const options = {
@@ -167,16 +185,17 @@ exports.findUsers = async (req, res) => {
   try {
       const { Text, Gender, Year, College, Branch } = req.query;
       const regex = Text ? new RegExp(Text, 'i') : null; // 'i' for case-insensitive
-
+      const regexClg = College ? new RegExp(College, 'i') : null; 
+      const regexBr = Branch ? new RegExp(Branch, 'i') : null; 
       // Construct a query object based on available parameters
       let query = {};
 
       if (Gender) {query.Gender = Gender;
   }    if (Year){ query.Year = Year;
-     } if (College){ query.College = College;}
-      if (Branch) {query.Branch = Branch;
-
- }     if (regex) {
+     } if (College){ query.College = regexClg;}
+      if (Branch) {query.Branch = regexBr;}     
+      
+      if (regex) {
         query.$or = [
             { Name: regex },
             { Role: regex },
