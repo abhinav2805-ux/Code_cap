@@ -104,11 +104,14 @@ exports.signIn=async (req, res) => {
     try {
       let user = await userModel.findOne({ Username });
       if (!user) {
+        console.log("nahi mila")
         return res.status(400).json({ msg: 'Invalid Credentials' });
+        
       }
-  
+      
       const isMatch = await bcrypt.compare(Password, user.Password);
       if (!isMatch) {
+        console.log("galat dala h tumne")
         return res.status(400).json({ msg: 'Invalid Credentials' });
       }
   

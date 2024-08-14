@@ -1,5 +1,5 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
 import { useToast } from './ui/use-toast';
 
@@ -33,7 +33,7 @@ function EditProfile() {
     fullName: '',
     email: '',
     gender: '',
-    skills: [''],
+    skills: [''], // Initialize with an empty skill
     college: '',
     year: '',
     branch: '',
@@ -44,10 +44,12 @@ function EditProfile() {
     confirmPassword: '',
     avatar: '',
   });
+  const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
-  const { username } = useParams<{ username: string }>();
   const { toast } = useToast();
+  const [typingTimer, setTypingTimer] = useState<NodeJS.Timeout | null>(null); // For debouncing
+
   function getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
     for (let cookie of cookies) {
@@ -61,9 +63,8 @@ function EditProfile() {
 
   useEffect(() => {
     const username = getCookieValue('user');
-    console.log(username);
     fetch(`http://localhost:3000/api/user/getProfile/${username}`, {
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((response) => response.json())
       .then((data) => {
@@ -72,7 +73,7 @@ function EditProfile() {
           fullName: data[0].Name,
           email: data[0].Email,
           gender: data[0].Gender,
-          skills: data[0].Skills || [],
+          skills: data[0].Skill || [''], // Ensure skills are set correctly
           college: data[0].College,
           year: data[0].Year,
           branch: data[0].Branch,
@@ -83,18 +84,31 @@ function EditProfile() {
           confirmPassword: '',
           avatar: data.avatar,
         });
-        console.log(data);
+        setAvatarUrl(`https://avatars.githubusercontent.com/${data[0].Github}`);
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
       });
   }, []);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
 
-    if (name === 'skills') {
-      return; // Skills are handled separately
+    if (name === 'github') {
+      if (typingTimer) {
+        clearTimeout(typingTimer);
+      }
+
+      const newTimer = setTimeout(() => {
+        // Update avatar URL based on GitHub username after 5 seconds
+        if (value.trim() === '') {
+          setAvatarUrl('https://github.com/shadcn.png'); // Set default avatar if GitHub username is empty
+        } else {
+          setAvatarUrl(`https://avatars.githubusercontent.com/${value}`);
+        }
+      }, 3000); // 3-second delay
+
+      setTypingTimer(newTimer);
     }
 
     setFormData((prevState) => ({
@@ -133,21 +147,11 @@ function EditProfile() {
 
   const validate = () => {
     const errors: FormErrors = {};
-
-    if (!formData.fullName) {
-      errors.fullName = 'Full Name is required';
-    }
-    if (!formData.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Email address is invalid';
-    }
-    if (!formData.password) {
-      errors.password = 'Password is required';
-    }
-    if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
+    if (!formData.fullName) {errors.fullName = 'Full Name is required';}
+    if (!formData.email){ errors.email = 'Email is required';}
+    else if (!/\S+@\S+\.\S+/.test(formData.email)) {errors.email = 'Email address is invalid';}
+    if (!formData.password) {errors.password = 'Password is required';}
+    if (formData.password !== formData.confirmPassword) {errors.confirmPassword = 'Passwords do not match';}
 
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -155,22 +159,22 @@ function EditProfile() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-   // console.log(formData);
-    const userData={
-      Name: formData.username,
-      Username:formData.username,
-      Email:formData.email,
-      Gender:formData.gender,
-      College:formData.college,
-      Branch:formData.branch,
-      Github:formData.github,
-      LinkedIn:formData.linkedin,
+    const userData = {
+      Name: formData.fullName,
+      Username: formData.username,
+      Email: formData.email,
+      Gender: formData.gender,
+      College: formData.college,
+      Branch: formData.branch,
+      Github: formData.github,
+      LinkedIn: formData.linkedin,
       Role: formData.role,
       Skill: formData.skills,
-      Year: formData.year
-    }
+      Year: formData.year,
+      // Password: formData.password,
+    };
     console.log(userData);
-    
+
     if (validate()) {
       fetch(`http://localhost:3000/api/user/editProfile/${formData.username}`, {
         method: 'POST',
@@ -183,15 +187,13 @@ function EditProfile() {
         .then((response) => response.json())
         .then((data) => {
           console.log('Form submitted successfully:', data);
-          // Navigate to another page or show a success message
           toast({
-            title: "Credentials updated successfully",
-            
+            title: 'Profile updated successfully',
           });
           setTimeout(() => {
-            navigate('/Home');  
+            window.location.href = '/Home';
+            navigate('/Home');
           }, 2000);
-          
         })
         .catch((error) => {
           console.error('Error submitting form:', error);
@@ -200,7 +202,7 @@ function EditProfile() {
   };
 
   const handleBackClick = () => {
-    navigate('/'); // Navigate to the home page
+    navigate('/Home'); // Navigate to the home page
   };
 
   return (
@@ -211,10 +213,9 @@ function EditProfile() {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white rounded-lg p-8 flex flex-col items-center w-full max-w-md md:max-w-2xl shadow-lg space-y-4">
-        
         <div className="relative w-24 h-24 mb-4">
           <Avatar className="w-full h-full rounded-full object-cover border-4 border-green-500">
-            <AvatarImage src={`https://avatars.githubusercontent.com/${formData.github}`} /> 
+            <AvatarImage src={avatarUrl} />
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <label htmlFor="avatarInput" className="absolute right-0 bottom-0 w-6 h-6 bg-black text-white rounded-full flex justify-center items-center border border-white cursor-pointer">
@@ -230,164 +231,171 @@ function EditProfile() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-full">
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2">
+            <label htmlFor="fullName" className="block text-gray-700">Full Name</label>
             <input
-              className={`w-full border-2 ${errors.fullName ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
+              type="text"
+              id="fullName"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="Full Name"
-              required
+              className="w-full p-2 border bg-gray-400 text-white border-gray-300 rounded"
             />
-            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName}</p>}
+            {errors.fullName && <p className="text-red-500">{errors.fullName}</p>}
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="email" className="block text-gray-700">Email</label>
             <input
-              className={`w-full border-2 ${errors.email ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
+              type="email"
+              id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="E-mail"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+            {errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
-          <div className="col-span-2 md:col-span-1">
-            <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+
+          <div>
+            <label htmlFor="gender" className="block text-gray-700">Gender</label>
+            <select
+              id="gender"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              placeholder="Gender"
-              required
-            />
-          </div>
-          <div className="col-span-2 md:col-span-1">
-            {formData.skills.map((skill, index) => (
-              <div key={index} className="flex items-center mb-2">
-                <input
-                  className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
-                  value={skill}
-                  onChange={(e) => handleSkillChange(e, index)}
-                  placeholder="Skill"
-                  required
-                />
-                <button
-                  type="button"
-                  className="ml-2 bg-red-500 text-white rounded px-2 py-1"
-                  onClick={() => removeSkill(index)}
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              className="mt-2 bg-green-500 text-white rounded px-2 py-1"
-              onClick={addSkill}
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             >
-              Add Skill
-            </button>
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="college" className="block text-gray-700">College</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="college"
               name="college"
               value={formData.college}
               onChange={handleChange}
-              placeholder="College"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="year" className="block text-gray-700">Year</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="year"
               name="year"
               value={formData.year}
               onChange={handleChange}
-              placeholder="Year"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="branch" className="block text-gray-700">Branch</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="branch"
               name="branch"
               value={formData.branch}
               onChange={handleChange}
-              placeholder="Branch"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="linkedin" className="block text-gray-700">LinkedIn</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="linkedin"
               name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
-              placeholder="LinkedIn"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="github" className="block text-gray-700">GitHub</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="github"
               name="github"
               value={formData.github}
               onChange={handleChange}
-              placeholder="GitHub Username "
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="role" className="block text-gray-700">Role</label>
             <input
-              className="w-full border-2 bg-white text-black rounded-xl px-3 py-2 outline-none border-black"
+              type="text"
+              id="role"
               name="role"
               value={formData.role}
               onChange={handleChange}
-              placeholder="Role"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="password" className="block text-gray-700">Password</label>
             <input
-              className={`w-full border-2 ${errors.password ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Password"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
-            {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
+            {errors.password && <p className="text-red-500">{errors.password}</p>}
           </div>
-          <div className="col-span-2 md:col-span-1">
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-gray-700">Confirm Password</label>
             <input
-              className={`w-full border-2 ${errors.confirmPassword ? 'border-red-500' : 'border-black'} bg-white text-black rounded-xl px-3 py-2 outline-none`}
               type="password"
+              id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              placeholder="Confirm Password"
-              required
+              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
             />
-            {errors.confirmPassword && <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
           </div>
         </div>
 
-        <div className="w-full flex justify-between items-center mt-4">
-          <button
-            type="button"
-            onClick={handleBackClick}
-            className="bg-yellow-500 text-white px-4 py-2 rounded"
-          >
-            Back
+        <div className="w-full">
+          <label className="block text-gray-700 mb-2">Skills</label>
+          {formData.skills.map((skill, index) => (
+            <div key={index} className="flex items-center mb-2">
+              <input
+                type="text"
+                value={skill}
+                onChange={(e) => handleSkillChange(e, index)}
+                className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              />
+              <button type="button" onClick={() => removeSkill(index)} className="ml-2 text-red-500">✖</button>
+            </div>
+          ))}
+          <button type="button" onClick={addSkill} className="bg-blue-500 text-white px-4 py-2 rounded">
+            Add Skill
           </button>
-          <button
-            type="submit"
-            className="bg-green-500 text-white px-4 py-2 rounded"
-          >
+        </div>
+
+        <div className="flex gap-4">
+          <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
             Save Changes
+          </button>
+          <button type="button" onClick={handleBackClick} className="bg-gray-500 text-white px-4 py-2 rounded">
+            Back
           </button>
         </div>
       </form>
