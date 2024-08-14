@@ -28,15 +28,15 @@ exports.editProfile=async(req,res)=>{
         }
         console.log(usern);
         const update=req.body;
-         const pw=update.Password;
+      //   const pw=update.Password;
         //  console.log(update);
         //  console.log(user);
         //  console.log(pw);
         // console.log(user[0].Password);
-        const isMatch = await bcrypt.compare(pw, user[0].Password);
-      if (!isMatch) {
-        return res.status(400).json({ msg: 'Invalid Credentials' });
-      }
+      //   const isMatch = await bcrypt.compare(pw, user[0].Password);
+      // if (!isMatch) {
+      //   return res.status(400).json({ msg: 'Invalid Credentials' });
+      // }
     //   Object.keys(update).forEach(key => {
     //     if (key == 'Name' || key=='Gender'  && typeof update[key] === 'string') {
     //         update[key] = update[key].toLowerCase();
