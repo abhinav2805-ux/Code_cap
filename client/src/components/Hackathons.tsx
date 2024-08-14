@@ -8,6 +8,8 @@ function Hackathons() {
 
     const options = ['Venue', 'Fees', 'Team Size', 'Date', 'Name'];
 
+    const  [cardsData,setCardsData] = useState([]);
+
     const handleOptionClick = (option:any) => {
       setValue(option);
       setShowOptions(false);
@@ -21,7 +23,8 @@ function Hackathons() {
           });
           if (response.ok) {
             const data = await response.json();
-            console.log(data);            
+            setCardsData(data);
+            console.log(cardsData);            
           } else {
             console.error("Failed to fetch default profiles", response);
           }
@@ -32,48 +35,7 @@ function Hackathons() {
   
       fetchDefaultProfiles();
     }, []);
-    const cardsData = [
-        {
-          imageUrl: '/hacks/hack1.jpg',
-          name: 'Event 1',
-          host: 'Host 1',
-          date: '2024-07-22',
-          teamSize: '4',
-          registrationPrice: '$50',
-        },
-        {
-          imageUrl: '/hacks/hack2.jpg',
-          name: 'Event 2',
-          host: 'Host 2',
-          date: '2024-08-15',
-          teamSize: '6',
-          registrationPrice: '$75',
-        },
-        {
-          imageUrl: '/hacks/hack3.jpg',
-          name: 'Event 3',
-          host: 'Host 3',
-          date: '2024-08-15',
-          teamSize: '6',
-          registrationPrice: '$75',
-        },
-        {
-          imageUrl: '/hacks/hack4.jpg',
-          name: 'Event 4',
-          host: 'Host 4',
-          date: '2024-08-15',
-          teamSize: '6',
-          registrationPrice: '$75',
-        },
-        {
-          imageUrl: '/hacks/hack5.jpg',
-          name: 'Event 5',
-          host: 'Host 5',
-          date: '2024-08-15',
-          teamSize: '6',
-          registrationPrice: '$75',
-        },
-    ];
+    
     
   return (
     <div className='mx-auto flex flex-col justify-center items-center  bg-black min-h-screen space-y-8 px-auto py-16'>
@@ -120,16 +82,15 @@ function Hackathons() {
 </div>
 
         <div className="w-full md:w-3/4  px-4 md:px-0   space-y-6 ">
-            {cardsData.map((card) => (
+            {cardsData.map((card:any) => (
                 <Card 
-                    imageUrl={card.imageUrl}
-                    name={card.name}
-                    host={card.host}
-                    date={card.date}
+                    imageUrl={card.Image}
+                    name={card.Name}
+                    mode={card.Mode}
+                    date={card.lastDate}
                     teamSize={card.teamSize}
-                    registrationPrice={card.registrationPrice}
                 />
-                
+
             ))}
         </div>
     </div>
