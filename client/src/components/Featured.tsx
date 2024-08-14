@@ -1,4 +1,4 @@
-import React from 'react'
+import {useState,useEffect} from 'react'
 import {
   Carousel,
   CarouselContent,
@@ -10,64 +10,50 @@ import FeaturedCard from './FeaturedCard'
 import { Button } from './ui/button'
 
 function Featured() {
-  const cardsData = [
-    {
-      imageUrl: '/public/hacks/hack1.jpg',
-      name: 'Event 1',
-      host: 'Host 1',
-      date: '2024-07-22',
-      teamSize: '4',
-      registrationPrice: '$50',
-    },
-    {
-      imageUrl: '/public/hacks/hack2.jpg',
-      name: 'Event 2',
-      host: 'Host 2',
-      date: '2024-08-15',
-      teamSize: '6',
-      registrationPrice: '$75',
-    },
-    {
-      imageUrl: '/public/hacks/hack3.jpg',
-      name: 'Event 3',
-      host: 'Host 3',
-      date: '2024-08-15',
-      teamSize: '6',
-      registrationPrice: '$75',
-    },
-    {
-      imageUrl: '/public/hacks/hack4.jpg',
-      name: 'Event 4',
-      host: 'Host 4',
-      date: '2024-08-15',
-      teamSize: '6',
-      registrationPrice: '$75',
-    },
-    {
-      imageUrl: '/public/hacks/hack5.jpg',
-      name: 'Event 5',
-      host: 'Host 5',
-      date: '2024-08-15',
-      teamSize: '6',
-      registrationPrice: '$75',
-    },
-  ];
 
+  const  [cardsData,setCardsData] = useState([]);
+
+  useEffect(() => {
+    // Fetch default profiles when the component mounts
+    const fetchDefaultProfiles = async () => {
+      try {
+        const response = await fetch("http://localhost:3000/api/events/getAllEvents", {
+          credentials: "include",
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setCardsData(data);
+          console.log(cardsData);            
+        } else {
+          console.error("Failed to fetch default profiles", response);
+        }
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    fetchDefaultProfiles();
+  }, []);
+  
+
+
+ 
   return (
     <div className="bg-black px-4 py-8 flex flex-col justify-center items-center">
       <h1 className="text-center text-white text-3xl md:text-6xl font-bold">FEATURED HACKATHON</h1>
       <div className="w-full md:w-3/4 py-10">
         <Carousel>
           <CarouselContent>
-            {cardsData.map((card, index) => (
+            {cardsData.map((card:any , index) => (
               <CarouselItem key={index}>
                 <FeaturedCard 
-                  imageUrl={card.imageUrl}
-                  name={card.name}
-                  host={card.host}
-                  date={card.date}
+                  imageUrl={card.Image}
+                  name={card.Name}
+                  mode={card.Mode}
+                  date={card.lastDate}
                   teamSize={card.teamSize}
-                  registrationPrice={card.registrationPrice}
+                  hackURL={card.hackURL}
+                  // registrationPrice={card.registrationPrice}
                 />
               </CarouselItem>
             ))}

@@ -216,7 +216,7 @@ function EditProfile() {
         <div className="relative w-24 h-24 mb-4">
           <Avatar className="w-full h-full rounded-full object-cover border-4 border-green-500">
             <AvatarImage src={avatarUrl} />
-            <AvatarFallback>CN</AvatarFallback>
+            <AvatarFallback>GitHub</AvatarFallback>
           </Avatar>
           <label htmlFor="avatarInput" className="absolute right-0 bottom-0 w-6 h-6 bg-black text-white rounded-full flex justify-center items-center border border-white cursor-pointer">
             ✎
@@ -231,40 +231,53 @@ function EditProfile() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-full">
-          <div className="col-span-2">
-            <label htmlFor="fullName" className="block text-gray-700">Full Name</label>
+        <div className="">
+            <label htmlFor="username" className="block text-gray-700 font-semibold">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
+            />
+            {errors.fullName && <p className="text-red-500">{errors.fullName}</p>}
+          </div>
+
+          <div className="">
+            <label htmlFor="fullName" className="block text-gray-700 font-semibold">Full Name</label>
             <input
               type="text"
               id="fullName"
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full p-2 border bg-gray-400 text-white border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
             {errors.fullName && <p className="text-red-500">{errors.fullName}</p>}
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-gray-700">Email</label>
+            <label htmlFor="email" className="block text-gray-700 font-semibold">Email</label>
             <input
               type="email"
               id="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
             {errors.email && <p className="text-red-500">{errors.email}</p>}
           </div>
 
           <div>
-            <label htmlFor="gender" className="block text-gray-700">Gender</label>
+            <label htmlFor="gender" className="block text-gray-700 font-semibold">Gender</label>
             <select
               id="gender"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -274,121 +287,126 @@ function EditProfile() {
           </div>
 
           <div>
-            <label htmlFor="college" className="block text-gray-700">College</label>
+            <label htmlFor="college" className="block text-gray-700 font-semibold">College</label>
             <input
               type="text"
               id="college"
               name="college"
               value={formData.college}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
           <div>
-            <label htmlFor="year" className="block text-gray-700">Year</label>
+            <label htmlFor="year" className="block text-gray-700 font-semibold">Year</label>
             <input
               type="text"
               id="year"
               name="year"
               value={formData.year}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
           <div>
-            <label htmlFor="branch" className="block text-gray-700">Branch</label>
+            <label htmlFor="branch" className="block font-semibold text-gray-700 ">Branch</label>
             <input
               type="text"
               id="branch"
               name="branch"
               value={formData.branch}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
           <div>
-            <label htmlFor="linkedin" className="block text-gray-700">LinkedIn</label>
+            <label htmlFor="linkedin" className="block text-gray-700 font-semibold">LinkedIn</label>
             <input
               type="text"
               id="linkedin"
               name="linkedin"
               value={formData.linkedin}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
           <div>
-            <label htmlFor="github" className="block text-gray-700">GitHub</label>
+            <label htmlFor="github" className="block text-gray-700 font-semibold">GitHub Username</label>
             <input
               type="text"
               id="github"
               name="github"
               value={formData.github}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
           <div>
-            <label htmlFor="role" className="block text-gray-700">Role</label>
+            <label htmlFor="role" className="block text-gray-700 font-semibold">Role</label>
             <input
               type="text"
               id="role"
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
           </div>
 
+          <div className="w-full">
+              <label className="block text-gray-700 mb-2 font-semibold">Skills</label>
+              {formData.skills.map((skill, index) => (
+                <div key={index} className="flex items-center mb-2">
+                  <input
+                    
+                    type="text"
+                    value={skill}
+                    onChange={(e) => handleSkillChange(e, index)}
+                    className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
+                  />
+                  <button type="button" onClick={() => removeSkill(index)} className="ml-2 text-red-500">✖</button>
+                </div>
+              ))}
+              <button type="button" onClick={addSkill} className="bg-blue-500 text-white px-4 py-2 rounded">
+                Add Skill
+              </button>
+          </div>
+          
+        </div>
+        <div className='grid grid-cols-2 gap-4 w-full'>
           <div>
-            <label htmlFor="password" className="block text-gray-700">Password</label>
+            <label htmlFor="password" className="block text-gray-700 font-semibold">Password</label>
             <input
               type="password"
               id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
             {errors.password && <p className="text-red-500">{errors.password}</p>}
           </div>
 
           <div>
-            <label htmlFor="confirmPassword" className="block text-gray-700">Confirm Password</label>
+            <label htmlFor="confirmPassword" className="block text-gray-700 font-semibold">Confirm Password</label>
             <input
               type="password"
               id="confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
             />
             {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
           </div>
-        </div>
+          </div>
 
-        <div className="w-full">
-          <label className="block text-gray-700 mb-2">Skills</label>
-          {formData.skills.map((skill, index) => (
-            <div key={index} className="flex items-center mb-2">
-              <input
-                type="text"
-                value={skill}
-                onChange={(e) => handleSkillChange(e, index)}
-                className="w-full p-2 border text-white bg-gray-400 border-gray-300 rounded"
-              />
-              <button type="button" onClick={() => removeSkill(index)} className="ml-2 text-red-500">✖</button>
-            </div>
-          ))}
-          <button type="button" onClick={addSkill} className="bg-blue-500 text-white px-4 py-2 rounded">
-            Add Skill
-          </button>
-        </div>
+        
 
         <div className="flex gap-4">
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">

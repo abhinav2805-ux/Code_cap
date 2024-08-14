@@ -14,6 +14,7 @@ function Hackathons() {
       setValue(option);
       setShowOptions(false);
     };
+    
     useEffect(() => {
       // Fetch default profiles when the component mounts
       const fetchDefaultProfiles = async () => {
@@ -79,9 +80,8 @@ function Hackathons() {
       ))}
     </div>
   )}
-</div>
-
-        <div className="w-full md:w-3/4  px-4 md:px-0   space-y-6 ">
+  </div>
+    <div className="w-full md:w-3/4  px-4 md:px-0   space-y-6 ">
             {cardsData.map((card:any) => (
                 <Card 
                     imageUrl={card.Image}
@@ -89,6 +89,7 @@ function Hackathons() {
                     mode={card.Mode}
                     date={card.lastDate}
                     teamSize={card.teamSize}
+                    hackURL={card.hackURL} 
                 />
 
             ))}

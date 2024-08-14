@@ -8,9 +8,10 @@ interface CardProps {
     mode: string;
     date: string;
     teamSize: string;
+    hackURL: string;
 }
 
-const Card: React.FC<CardProps> = ({ imageUrl, name, mode, date, teamSize}) => {
+const Card: React.FC<CardProps> = ({ imageUrl, name, mode, date, teamSize,hackURL}) => {
     return (
       <div className="bg-gradient-to-r from-slate-950 to-gray-800 border-2 border-spacing-2 border-white text-yellow-400 rounded-lg shadow-lg flex flex-col   md:flex-row p-4 md:px-0 md:p-8 space-y-4 md:space-y-0">
         <div className="flex justify-center w-full md:w-1/2 ">
@@ -25,8 +26,8 @@ const Card: React.FC<CardProps> = ({ imageUrl, name, mode, date, teamSize}) => {
           
           </div>
           <div className="flex items-center justify-center pr-2 md:justify-start">
-            <a href="">
-              <Button variant={'outline'} className="bg-yellow-500 text-black p-2 rounded-full">
+            <a href={`${hackURL}`} target='_blank' title="Visit the hackathon website">
+              <Button  variant={'outline'} className="bg-yellow-500 text-black p-2 rounded-full">
                 <Link />
               </Button>
             </a>
