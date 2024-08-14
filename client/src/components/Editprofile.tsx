@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AvatarFallback, AvatarImage, Avatar } from './ui/avatar';
+import { useToast } from './ui/use-toast';
 
 interface FormData {
   username: string;
@@ -41,12 +42,12 @@ function EditProfile() {
     role: '',
     password: '',
     confirmPassword: '',
-    avatar: 'https://avatars.githubusercontent.com/u/114240845?s=400&u=c23a378d6835e8379337c1e3be9a6ff61cf7aa71&v=4',
+    avatar: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
   const { username } = useParams<{ username: string }>();
-
+  const { toast } = useToast();
   function getCookieValue(name: string) {
     const cookies = document.cookie.split('; ');
     for (let cookie of cookies) {
@@ -183,6 +184,14 @@ function EditProfile() {
         .then((data) => {
           console.log('Form submitted successfully:', data);
           // Navigate to another page or show a success message
+          toast({
+            title: "Credentials updated successfully",
+            
+          });
+          setTimeout(() => {
+            navigate('/Home');  
+          }, 2000);
+          
         })
         .catch((error) => {
           console.error('Error submitting form:', error);
@@ -205,7 +214,7 @@ function EditProfile() {
         
         <div className="relative w-24 h-24 mb-4">
           <Avatar className="w-full h-full rounded-full object-cover border-4 border-green-500">
-            <AvatarImage src={formData.avatar} />
+            <AvatarImage src={`https://avatars.githubusercontent.com/${formData.github}`} /> 
             <AvatarFallback>CN</AvatarFallback>
           </Avatar>
           <label htmlFor="avatarInput" className="absolute right-0 bottom-0 w-6 h-6 bg-black text-white rounded-full flex justify-center items-center border border-white cursor-pointer">
@@ -326,7 +335,7 @@ function EditProfile() {
               name="github"
               value={formData.github}
               onChange={handleChange}
-              placeholder="GitHub"
+              placeholder="GitHub Username "
               required
             />
           </div>

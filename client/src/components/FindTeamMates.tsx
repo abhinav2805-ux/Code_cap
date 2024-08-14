@@ -265,7 +265,7 @@ const FindTeamMates: React.FC = () => {
                     year={profile.Year} 
                     skills={profile.Skill}
                     gender={profile.Gender}
-                    imageSrc={`https://avatars.githubusercontent.com/${profile.Github}`}
+                    imageSrc={profile.Github}
                   />
                 </AccordionTrigger>
                 <AccordionContent>
