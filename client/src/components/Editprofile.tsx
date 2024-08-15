@@ -18,6 +18,7 @@ interface FormData {
   password: string;
   confirmPassword: string;
   avatar: string;
+  status: string;
 }
 
 interface FormErrors {
@@ -43,6 +44,7 @@ function EditProfile() {
     password: '',
     confirmPassword: '',
     avatar: '',
+    status: 'available', // Default value
   });
   const [avatarUrl, setAvatarUrl] = useState<string>('');
   const [errors, setErrors] = useState<FormErrors>({});
@@ -83,6 +85,7 @@ function EditProfile() {
           password: '',
           confirmPassword: '',
           avatar: data.avatar,
+          status: data.status || 'available',
         });
         setAvatarUrl(`https://avatars.githubusercontent.com/${data[0].Github}`);
       })
@@ -100,7 +103,7 @@ function EditProfile() {
       }
 
       const newTimer = setTimeout(() => {
-        // Update avatar URL based on GitHub username after 5 seconds
+        // Update avatar URL based on GitHub username after 3 seconds
         if (value.trim() === '') {
           setAvatarUrl('https://github.com/shadcn.png'); // Set default avatar if GitHub username is empty
         } else {
@@ -171,7 +174,7 @@ function EditProfile() {
       Role: formData.role,
       Skill: formData.skills,
       Year: formData.year,
-      // Password: formData.password,
+      Status: formData.status, // Include status in user data
     };
     console.log(userData);
 
@@ -231,7 +234,7 @@ function EditProfile() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 w-full">
-        <div className="">
+          <div>
             <label htmlFor="username" className="block text-gray-700 font-semibold">Username</label>
             <input
               type="text"
@@ -244,7 +247,7 @@ function EditProfile() {
             {errors.fullName && <p className="text-red-500">{errors.fullName}</p>}
           </div>
 
-          <div className="">
+          <div>
             <label htmlFor="fullName" className="block text-gray-700 font-semibold">Full Name</label>
             <input
               type="text"
@@ -298,8 +301,9 @@ function EditProfile() {
             />
           </div>
 
+
           <div>
-            <label htmlFor="year" className="block text-gray-700 font-semibold">Year</label>
+            <label htmlFor="year" className="block text-gray-700 font-semibold">Year Of PassOut</label>
             <input
               type="text"
               id="year"
@@ -311,16 +315,31 @@ function EditProfile() {
           </div>
 
           <div>
-            <label htmlFor="branch" className="block font-semibold text-gray-700 ">Branch</label>
-            <input
-              type="text"
-              id="branch"
-              name="branch"
-              value={formData.branch}
-              onChange={handleChange}
-              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
-            />
-          </div>
+  <label htmlFor="branch" className="block font-semibold text-gray-700">Branch </label>
+  <select
+    id="branch"
+    name="branch"
+    value={formData.branch}
+    onChange={handleChange}
+    className="w-full p-2 border-2 border-black bg-white text-black rounded-xl"
+  >
+    <option value="">Select Branch</option>
+    <option value="CSE">CSE</option>
+    <option value="IT">IT</option>
+    <option value="ECE">ECE</option>
+    <option value="EEE">EEE</option>
+    <option value="ME">ME</option>
+    <option value="CE">CE</option>
+    <option value="MAE">MAE</option>
+    <option value="AIML">AIML</option>
+    {/* Add more options as needed */}
+  </select>
+</div>
+
+
+    
+
+
 
           <div>
             <label htmlFor="linkedin" className="block text-gray-700 font-semibold">LinkedIn</label>
@@ -363,7 +382,6 @@ function EditProfile() {
               {formData.skills.map((skill, index) => (
                 <div key={index} className="flex items-center mb-2">
                   <input
-                    
                     type="text"
                     value={skill}
                     onChange={(e) => handleSkillChange(e, index)}
@@ -376,9 +394,23 @@ function EditProfile() {
                 Add Skill
               </button>
           </div>
-          
+
+          <div>
+            <label htmlFor="status" className="block text-gray-700 font-semibold">Status</label>
+            <select
+              id="status"
+              name="status"
+              value={formData.status}
+              onChange={handleChange}
+              className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
+            >
+              <option value="available">Available</option>
+              <option value="unavailable">Unavailable</option>
+            </select>
+          </div>
         </div>
-        <div className='grid grid-cols-2 gap-4 w-full'>
+        
+        <div className="grid grid-cols-2 gap-4 w-full">
           <div>
             <label htmlFor="password" className="block text-gray-700 font-semibold">Password</label>
             <input
@@ -404,9 +436,7 @@ function EditProfile() {
             />
             {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword}</p>}
           </div>
-          </div>
-
-        
+        </div>
 
         <div className="flex gap-4">
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">

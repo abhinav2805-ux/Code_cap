@@ -19,6 +19,8 @@ interface Profile {
   Branch: string;
   College: string;
   Year: string;
+  LinkedIn:string;
+  Status:string;
 }
 
 const FindTeamMates: React.FC = () => {
@@ -35,7 +37,7 @@ const FindTeamMates: React.FC = () => {
   const subOptions: { [key: string]: string[] } = {
     Gender: ["Male", "Female"],
     Year: ["2025", "2026", "2027", "2028"],
-    Branch: ["CSE", "ECE", "IT", "AIML"],
+    Branch: ["CSE", "ECE", "IT", "AIML","EEE",'MAE',"CE","ME"],
     Status: ["Available", "Unavailable"],
   };
 
@@ -266,6 +268,7 @@ const FindTeamMates: React.FC = () => {
                     skills={profile.Skill}
                     gender={profile.Gender}
                     imageSrc={profile.Github}
+                    linkedIn={profile.LinkedIn}
                   />
                 </AccordionTrigger>
                 <AccordionContent>
@@ -273,7 +276,7 @@ const FindTeamMates: React.FC = () => {
                     role={profile.Role}
                     branch={profile.Branch}
                     college={profile.College}
-                    project="nil"
+                    status={profile.Status}
                   />
                 </AccordionContent>
                 <br />

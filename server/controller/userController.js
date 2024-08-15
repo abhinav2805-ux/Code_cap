@@ -186,17 +186,19 @@ exports.signIn=async (req, res) => {
 
 exports.findUsers = async (req, res) => {
   try {
-      const { Text, Gender, Year, College, Branch } = req.query;
+      const { Text, Gender, Year, College, Branch,Status } = req.query;
       const regex = Text ? new RegExp(Text, 'i') : null; // 'i' for case-insensitive
       const regexClg = College ? new RegExp(College, 'i') : null; 
       const regexBr = Branch ? new RegExp(Branch, 'i') : null; 
+      const regexSt = Status ? new RegExp(Status, 'i') : null; 
       // Construct a query object based on available parameters
       let query = {};
 
       if (Gender) {query.Gender = Gender;
   }    if (Year){ query.Year = Year;
      } if (College){ query.College = regexClg;}
-      if (Branch) {query.Branch = regexBr;}     
+      if (Branch) {query.Branch = regexBr;}   
+      if (Status) {query.Status = regexSt;}     
       
       if (regex) {
         query.$or = [
@@ -216,6 +218,7 @@ exports.findUsers = async (req, res) => {
       Branch: 1,
       Year: 1,
       Github:1,
+      Status:1,
   };
       // Execute the database query
       const users = await userModel.find(query).select(projection);

@@ -51,6 +51,10 @@ const userSchema=mongoose.Schema({
         type: String,
         default: "",
     },
+    Status:{
+        type: String,
+        default: "Available",
+    }
 })
 
 module.exports=mongoose.model("UserModel",userSchema);

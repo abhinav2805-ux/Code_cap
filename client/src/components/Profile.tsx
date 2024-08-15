@@ -7,10 +7,11 @@ interface ProfileProps {
   year: string;
   skills: string[];
   gender: string;
-  imageSrc: string; // Image source URL
+  imageSrc: string;
+  linkedIn: string; // LinkedIn URL
 }
 
-const Profile: React.FC<ProfileProps> = ({ name, year, skills, gender, imageSrc }) => {
+const Profile: React.FC<ProfileProps> = ({ name, year, skills, gender, imageSrc, linkedIn }) => {
   return (
     <div className="w-full flex flex-col md:flex-row md:h-[100px] bg-gray-600 rounded-t-xl p-2 md:p-0">
       <div className="flex justify-between md:justify-center items-center w-full md:w-[10%] h-[50px] md:h-full">
@@ -37,13 +38,15 @@ const Profile: React.FC<ProfileProps> = ({ name, year, skills, gender, imageSrc 
           <p className="text-lg md:text-xl text-yellow-500">Gender :</p>
           <p className="text-lg md:text-xl ml-1 text-white">{gender}</p>
         </div>
-        <div className="flex items-center mb-2">
+        <div className="flex items-center mb-2 overflow-x-auto">
           <p className="text-lg md:text-xl text-yellow-500">Skills :</p>
-          <p className="text-lg md:text-xl ml-1 text-white">{skills.join(', ')}</p>
+          <p className="text-lg md:text-xl ml-1 text-white truncate w-full max-w-[calc(100%-100px)]">{skills.join(', ')}</p>
         </div>
       </div>
       <div className="hidden md:flex justify-center items-center w-full md:w-[10%] h-[50px] md:h-full">
-        <PersonAddIcon className="text-yellow-500" />
+        <a href={linkedIn} target="_blank" rel="noopener noreferrer" className="text-yellow-500">
+          <PersonAddIcon />
+        </a>
       </div>
     </div>
   );
