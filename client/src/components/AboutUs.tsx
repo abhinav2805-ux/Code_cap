@@ -1,4 +1,5 @@
 import React from 'react';
+import { LinkedIn, GitHub, Email } from '@mui/icons-material';
 import SupportUs from './SupportUs';
 
 const teamMembers = [
@@ -7,7 +8,10 @@ const teamMembers = [
     title: "Frontend Developer & Project Manager",
     description:
       "I serve as the frontend developer and project manager for this initiative. My passion for technology drives my desire to create seamless user experiences. I oversee the development process and ensure that our projects are executed efficiently and effectively.",
-    image: "/Ellipse 22.svg",
+    image: "/ag.png",
+    linkedin: "https://www.linkedin.com/in/abhinav-gupta-b3317128a/",
+    github: "https://github.com/abhinav2805-ux",
+    email: "gupta380189@gmail.com",
   },
   {
     name: "Ashwin Bansal",
@@ -15,20 +19,29 @@ const teamMembers = [
     description:
       "I am the backend developer for this project. I focus on creating a robust and scalable infrastructure to support our applications. My goal is to ensure that our backend systems are efficient and reliable.",
     image: "/Ellipse 22.svg",
+    linkedin: "https://www.linkedin.com/in/ashwin-bansal-5b5a70257/",
+    github: "https://github.com/Ashwin1902",
+    email: "ashwinbansal19feb@gmail.com",
   },
   {
     name: "Ansh Jain",
     title: "Frontend Developer & Product Designer",
     description:
       "I am responsible for the frontend development and product design. I enjoy creating visually appealing and user-friendly interfaces. My experience in product design helps us build intuitive and engaging applications.",
-    image: "/Ellipse 23.svg",
+    image: "/aj.png",
+    linkedin: "https://www.linkedin.com/in/ansh-jain-78986b242/",
+    github: "https://github.com/AnshJain9159",
+    email: "anshjain9159@gmail.com",
   },
   {
     name: "Priyanshu",
     title: "Frontend Developer",
     description:
       "I am a frontend developer for our platform. I specialize in creating interactive and dynamic user interfaces. My goal is to enhance the user experience through thoughtful design and development.",
-    image: "/Ellipse 24.svg",
+    image: "/pk.png",
+    linkedin: "https://www.linkedin.com/in/priyanshu-kumar-15ab85294/",
+    github: "https://github.com/cbum-dev",
+    email: "priyanshu@example.com",
   },
 ];
 
@@ -59,11 +72,11 @@ function AboutUs() {
           experience and drive innovation within our college and beyond.
         </p>
         <h2 className="text-3xl md:text-5xl font-bold text-center mb-8">MEET OUR TEAM</h2>
-        <div className="bg-black p-4 md:p-6 mb-8 rounded-xl text-center border-2 border-white">
+        <div className="bg-gray-700 p-4 md:p-6 mb-8 rounded-xl text-center border-2 border-white">
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
             <img
               className="w-32 h-32 md:w-56 md:h-56 object-cover rounded-full mb-4 md:mb-0"
-              src="/Rectangle.svg"
+              src="ks.jpg"
               alt="Kartik Singh"
             />
             <div className="text-center md:text-left">
@@ -80,6 +93,17 @@ function AboutUs() {
                 passionate and talented students to collaborate and innovate
                 through hackathons.
               </p>
+              <div className="mt-4 flex justify-center gap-4">
+                <a href="https://in.linkedin.com/in/kartik-singh19" target="_blank" rel="noopener noreferrer">
+                  <LinkedIn className="text-blue-700 text-xl hover:text-blue-900" />
+                </a>
+                <a href="https://github.com/PROBOTTHACK" target="_blank" rel="noopener noreferrer">
+                  <GitHub className="text-gray-900 text-xl hover:text-gray-600" />
+                </a>
+                <a href="mailto:ks19092005@gmail.com">
+                  <Email className="text-red-500 text-xl hover:text-red-700" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -87,7 +111,7 @@ function AboutUs() {
           {teamMembers.map((member) => (
             <div
               key={member.name}
-              className="bg-black p-4 md:p-6 rounded-xl text-center border-2 border-white"
+              className="bg-gray-700 p-4 md:p-6 rounded-xl text-center border-2 border-white"
             >
               <div className="flex flex-col md:flex-row items-center gap-6 md:gap-8">
                 {member.image && (
@@ -107,12 +131,29 @@ function AboutUs() {
                   <p className="text-base md:text-lg mt-4">
                     {member.description}
                   </p>
+                  <div className="mt-4 flex justify-center gap-4">
+                    {member.linkedin && (
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer">
+                        <LinkedIn className="text-blue-700 text-xl hover:text-blue-900" />
+                      </a>
+                    )}
+                    {member.github && (
+                      <a href={member.github} target="_blank" rel="noopener noreferrer">
+                        <GitHub className="text-gray-900 text-xl hover:text-gray-600" />
+                      </a>
+                    )}
+                    {member.email && (
+                      <a href={`mailto:${member.email}`}>
+                        <Email className="text-red-500 text-xl hover:text-red-700" />
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
-        <SupportUs/>
+        <SupportUs />
       </div>
     </div>
   );
