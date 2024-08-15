@@ -46,7 +46,9 @@ function EditProfile() {
     avatar: '',
     status: 'available', // Default value
   });
-  const [avatarUrl, setAvatarUrl] = useState<string>('');
+  const defaultAvatarUrl = 'https://github.com/shadcn.png'; // Replace with your default avatar URL
+
+  const [avatarUrl, setAvatarUrl] = useState<string>(defaultAvatarUrl);
   const [errors, setErrors] = useState<FormErrors>({});
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -104,11 +106,9 @@ function EditProfile() {
 
       const newTimer = setTimeout(() => {
         // Update avatar URL based on GitHub username after 3 seconds
-        if (value.trim() === '') {
-          setAvatarUrl('https://github.com/shadcn.png'); // Set default avatar if GitHub username is empty
-        } else {
+       
           setAvatarUrl(`https://avatars.githubusercontent.com/${value}`);
-        }
+        
       }, 3000); // 3-second delay
 
       setTypingTimer(newTimer);
@@ -135,18 +135,21 @@ function EditProfile() {
     setFormData({ ...formData, skills: newSkills });
   };
 
-  const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const reader = new FileReader();
-      reader.onload = (event: any) => {
-        setFormData({
-          ...formData,
-          avatar: event.target.result,
-        });
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    }
-  };
+ const handleAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files[0]) {
+    const reader = new FileReader();
+    reader.onload = (event: any) => {
+      setFormData({
+        ...formData,
+        avatar: event.target.result,
+      });
+      setAvatarUrl(event.target.result); // Update avatar URL with selected image
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  } else {
+    setAvatarUrl(defaultAvatarUrl); // Set default avatar if no file is selected
+  }
+};
 
   const validate = () => {
     const errors: FormErrors = {};
@@ -219,11 +222,9 @@ function EditProfile() {
         <div className="relative w-24 h-24 mb-4">
           <Avatar className="w-full h-full rounded-full object-cover border-4 border-green-500">
             <AvatarImage src={avatarUrl} />
-            <AvatarFallback>GitHub</AvatarFallback>
+            <AvatarFallback></AvatarFallback>
           </Avatar>
-          <label htmlFor="avatarInput" className="absolute right-0 bottom-0 w-6 h-6 bg-black text-white rounded-full flex justify-center items-center border border-white cursor-pointer">
-            ✎
-          </label>
+         
           <input
             id="avatarInput"
             type="file"
@@ -377,23 +378,25 @@ function EditProfile() {
             />
           </div>
 
-          <div className="w-full">
+                      <div className="w-full">
               <label className="block text-gray-700 mb-2 font-semibold">Skills</label>
-              {formData.skills.map((skill, index) => (
-                <div key={index} className="flex items-center mb-2">
-                  <input
-                    type="text"
-                    value={skill}
-                    onChange={(e) => handleSkillChange(e, index)}
-                    className="w-full p-2 border-2 border-black  bg-white   text-black  rounded-xl"
-                  />
-                  <button type="button" onClick={() => removeSkill(index)} className="ml-2 text-red-500">✖</button>
-                </div>
-              ))}
-              <button type="button" onClick={addSkill} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <div className="border-2 border-black bg-white rounded-xl overflow-auto max-h-60 p-2">
+                {formData.skills.map((skill, index) => (
+                  <div key={index} className="flex items-center mb-2">
+                    <input
+                      type="text"
+                      value={skill}
+                      onChange={(e) => handleSkillChange(e, index)}
+                      className="w-full p-2 border-2 border-black bg-white text-black rounded-xl"
+                    />
+                    <button type="button" onClick={() => removeSkill(index)} className="ml-2 text-red-500">✖</button>
+                  </div>
+                ))}
+              </div>
+              <button type="button" onClick={addSkill} className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
                 Add Skill
               </button>
-          </div>
+            </div>
 
           <div>
             <label htmlFor="status" className="block text-gray-700 font-semibold">Status</label>

@@ -1,7 +1,5 @@
-// App.tsx
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
- // import Login from './Login';
 import Register from './Register';
 import Home from './Home';
 import FindTeamMates from './components/FindTeamMates';
@@ -12,6 +10,7 @@ import EditProfile from './components/Editprofile';
 import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
 import { Toaster } from './components/ui/toaster';
+
 const App: React.FC = () => {
     return (
         <Router>
@@ -23,11 +22,13 @@ const App: React.FC = () => {
 const Layout: React.FC = () => {
     const location = useLocation();
 
-    // List of routes where the navbar should not be displayed
+    // List of routes where the navbar and footer should not be displayed
     const noNavbarRoutes = ['/register', '/'];
+    const noFooterRoutes = ['/register', '/'];
 
-    // Check if the current route should hide the navbar
+    // Check if the current route should hide the navbar and footer
     const showNavbar = !noNavbarRoutes.includes(location.pathname);
+    const showFooter = !noFooterRoutes.includes(location.pathname);
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -43,8 +44,8 @@ const Layout: React.FC = () => {
                     <Route path="/hackathons" element={<Hackathons />} />
                 </Routes>
             </main>
-            <Toaster/>
-            <Footer />
+            <Toaster />
+            {showFooter && <Footer />}
         </div>
     );
 };

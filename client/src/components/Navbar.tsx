@@ -23,9 +23,11 @@ const Navbar: React.FC = () => {
     avatar: '',
   });
 
+  // Default avatar URL
+  const defaultAvatarUrl = ''; // Replace with your actual default avatar URL
+
   useEffect(() => {
     const username = getCookieValue('user');
-    console.log(username);
     fetch(`http://localhost:3000/api/user/getProfile/${username}`, {
       credentials: 'include'
     })
@@ -35,7 +37,6 @@ const Navbar: React.FC = () => {
           github: data[0].Github,
           avatar: data.avatar,
         });
-        console.log(data);
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
@@ -91,7 +92,12 @@ const Navbar: React.FC = () => {
       console.error('An error occurred during sign out:', error);
     }
   };
-  
+
+  // Determine the avatar URL to use
+  const avatarUrl = formData.github
+    ? `https://avatars.githubusercontent.com/${formData.github}`
+    : defaultAvatarUrl;
+
   return (
     <>
       <nav className="bg-black text-white flex justify-between items-center p-4">
@@ -112,8 +118,8 @@ const Navbar: React.FC = () => {
             onClick={toggleDropdown}
           >
             <Avatar className="w-full h-full rounded-full object-cover">
-              <AvatarImage src={`https://avatars.githubusercontent.com/${formData.github}`} />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarImage src={avatarUrl} />
+              <AvatarFallback>P</AvatarFallback>
             </Avatar>
           </Button>
 

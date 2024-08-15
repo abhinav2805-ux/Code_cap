@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
+
 interface ProfileProps {
   name: string;
   year: string;
@@ -38,9 +39,22 @@ const Profile: React.FC<ProfileProps> = ({ name, year, skills, gender, imageSrc,
           <p className="text-lg md:text-xl text-yellow-500">Gender :</p>
           <p className="text-lg md:text-xl ml-1 text-white">{gender}</p>
         </div>
-        <div className="flex items-center mb-2 overflow-x-auto">
+        <div className="flex items-center mb-2 overflow-hidden md:overflow-auto">
           <p className="text-lg md:text-xl text-yellow-500">Skills :</p>
-          <p className="text-lg md:text-xl ml-1 text-white truncate w-full max-w-[calc(100%-100px)]">{skills.join(', ')}</p>
+          <div className="relative text-lg md:text-xl ml-1 text-white flex flex-wrap">
+            <div className="hidden md:flex overflow-x-auto">
+              {skills.slice(0, 5).map((skill, index) => (
+                <span key={index} className="inline-block mr-2">{skill}</span>
+              ))}
+              {skills.length > 5 && <span className="inline-block mr-2 text-white">...</span>}
+            </div>
+            <div className="flex md:hidden flex-wrap">
+              {skills.slice(0, 4).map((skill, index) => (
+                <span key={index} className="inline-block mr-2">{skill}</span>
+              ))}
+              {skills.length > 5 && <span className="inline-block mr-2 text-yellow-500">...</span>}
+            </div>
+          </div>
         </div>
       </div>
       <div className="hidden md:flex justify-center items-center w-full md:w-[10%] h-[50px] md:h-full">
