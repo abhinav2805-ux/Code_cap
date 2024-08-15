@@ -10,6 +10,7 @@ import EditProfile from './components/Editprofile';
 import MainPage from './components/MainPage';
 import Hackathons from './components/Hackathons';
 import { Toaster } from './components/ui/toaster';
+import AdminPage from './components/AdminPage';
 
 const App: React.FC = () => {
     return (
@@ -37,6 +38,7 @@ const Layout: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/Home" element={<MainPage />} />
+                    <Route path="/admin" element={<AdminPage />} />
                     <Route path="/register" element={<Register />} />
                     <Route path="/buildteam" element={<FindTeamMates />} />
                     <Route path="/about" element={<About />} />
