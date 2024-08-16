@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CheckIcon from "@mui/icons-material/Check";
 import Profile from "./Profile";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Profile2 from "./Profile2";
 import {
   Accordion,
@@ -256,6 +257,7 @@ const FindTeamMates: React.FC = () => {
         )}
       </div>
 
+
       <div className="w-full h-[75%] bg-black px-2 md:px-8 overflow-auto">
         <Accordion type="single" collapsible className="w-full">
           {profiles.map((profile, index) => (
@@ -269,6 +271,7 @@ const FindTeamMates: React.FC = () => {
                   imageSrc={profile.Github}
                   linkedIn={profile.LinkedIn}
                 />
+             
               </AccordionTrigger>
               <AccordionContent>
                 <Profile2
@@ -276,13 +279,17 @@ const FindTeamMates: React.FC = () => {
                   branch={profile.Branch}
                   college={profile.College}
                   status={profile.Status}
+                  github={`https://github.com/${profile.Github}`}
                 />
               </AccordionContent>
               <br />
             </AccordionItem>
           ))}
+          
         </Accordion>
+        
       </div>
+      
     </div>
   );
 };

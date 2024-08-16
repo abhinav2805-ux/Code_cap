@@ -41,7 +41,7 @@ const teamMembers = [
     image: "/pk.png",
     linkedin: "https://www.linkedin.com/in/priyanshu-kumar-15ab85294/",
     github: "https://github.com/cbum-dev",
-    email: "priyanshu@example.com",
+    email: "priyanshukumar2002234@gmail.com",
   },
 ];
 

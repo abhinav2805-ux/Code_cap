@@ -219,6 +219,7 @@ exports.findUsers = async (req, res) => {
       Year: 1,
       Github:1,
       Status:1,
+      LinkedIn:1,
   };
       // Execute the database query
       const users = await userModel.find(query).select(projection);
